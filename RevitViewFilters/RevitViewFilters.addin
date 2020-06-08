@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">    
+    <Name>RevitViewFilters</Name>
+	<Assembly>
+      RevitViewFilters.dll
+    </Assembly>
+    <ClientId>ca8de30c-7493-4b17-ad21-1cc0d8f4b2ce</ClientId>
+    <FullClassName>RevitViewFilters.AppBatchFilterCreation</FullClassName>
+    <VendorId>Weandrevit</VendorId>
+    <VendorDescription>weandrevit.ru</VendorDescription>
+  </AddIn>
+</RevitAddIns>

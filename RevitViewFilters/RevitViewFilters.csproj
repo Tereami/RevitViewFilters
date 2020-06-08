@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RevitViewFilters</RootNamespace>
+    <AssemblyName>RevitViewFilters</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2020</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2017|AnyCPU' ">
+    <OutputPath>bin\R2017\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2017</DefineConstants>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AssemblyName>$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2018|AnyCPU' ">
+    <OutputPath>bin\R2018\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2018</DefineConstants>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AssemblyName>$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2019|AnyCPU' ">
+    <OutputPath>bin\R2019\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2019</DefineConstants>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <AssemblyName>$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2020|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\R2020\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2020</DefineConstants>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <AssemblyName>$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R2021|AnyCPU' ">
+    <OutputPath>bin\R2021\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;R2021</DefineConstants>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AssemblyName>$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2020\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2020\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="AdWindows">
+          <HintPath>C:\Program Files\Autodesk\Revit 2020\AdWindows.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='R2017' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="AdWindows">
+          <HintPath>C:\Program Files\Autodesk\Revit 2017\AdWindows.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='R2018' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="AdWindows">
+          <HintPath>C:\Program Files\Autodesk\Revit 2018\AdWindows.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='R2019' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="AdWindows">
+          <HintPath>C:\Program Files\Autodesk\Revit 2019\AdWindows.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='R2020' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2020\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2020\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="AdWindows">
+          <HintPath>C:\Program Files\Autodesk\Revit 2020\AdWindows.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='R2021' ">
+      <ItemGroup>
+        <Reference Include="RevitAPI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2021\RevitAPI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="RevitAPIUI">
+          <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2021\RevitAPIUI.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="AdWindows">
+          <HintPath>C:\Program Files\Autodesk\Revit 2021\AdWindows.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="AppBatchFilterCreation.cs" />
+    <Compile Include="ColorsCollection.cs" />
+    <Compile Include="CommandBatchDelete.cs" />
+    <Compile Include="CommandCreate.cs" />
+    <Compile Include="CommandViewColoring.cs" />
+    <Compile Include="CommandWallHatch.cs" />
+    <Compile Include="CriteriaType.cs" />
+    <Compile Include="FilterSourceInfo.cs" />
+    <Compile Include="FormBatchDelete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBatchDelete.Designer.cs">
+      <DependentUpon>FormBatchDelete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelectParameterForFilters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectParameterForFilters.Designer.cs">
+      <DependentUpon>FormSelectParameterForFilters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GetBuiltinCategory.cs" />
+    <Compile Include="MyParameter.cs" />
+    <Compile Include="ReadDataFromCSV.cs" />
+    <Compile Include="RuleCreator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormBatchDelete.resx">
+      <DependentUpon>FormBatchDelete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectParameterForFilters.resx">
+      <DependentUpon>FormSelectParameterForFilters.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RevitViewFilters.addin" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
