@@ -119,7 +119,7 @@ namespace RevitViewFilters
 
                     MyParameter mp = new MyParameter(curWalls.First().LookupParameter("Рзм.ОтметкаВерха"));
                     ParameterFilterElement filter =
-                        RuleCreator.createSimpleFilter(doc, catsIds, filterName, mp, CriteriaType.Equals);
+                        FilterCreator.createSimpleFilter(doc, catsIds, filterName, mp, CriteriaType.Equals);
 
                     curView.AddFilter(filter.Id);
                     OverrideGraphicSettings ogs = new OverrideGraphicSettings();

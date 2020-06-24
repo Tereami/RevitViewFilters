@@ -105,7 +105,7 @@ namespace RevitViewFilters
                         return Result.Failed;
                     }
 
-                    FilterRule rule = RuleCreator.CreateRule2(param, function, value);
+                    FilterRule rule = FilterCreator.CreateRule2(param, function, value);
                     filterRules.Add(rule);
                 }
 

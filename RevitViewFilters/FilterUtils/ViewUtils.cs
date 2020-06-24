@@ -23,6 +23,37 @@ namespace RevitViewFilters
 {
     public static class ViewUtils
     {
+        public static void ApplyViewFilter(Document doc, View view, ParameterFilterElement filter, ElementId solidFillPatternId, int colorNumber)
+        {
+            view.AddFilter(filter.Id);
+            OverrideGraphicSettings ogs = new OverrideGraphicSettings();
+
+            byte red = Convert.ToByte(ColorsCollection.colors[colorNumber].Substring(1, 2), 16);
+            byte green = Convert.ToByte(ColorsCollection.colors[colorNumber].Substring(3, 2), 16);
+            byte blue = Convert.ToByte(ColorsCollection.colors[colorNumber].Substring(5, 2), 16);
+
+            Color clr = new Color(red, green, blue);
+
+
+            ogs.SetProjectionLineColor(clr);
+            ogs.SetCutLineColor(clr);
+
+#if R2017 || R2018
+            ogs.SetProjectionFillColor(clr);
+            ogs.SetProjectionFillPatternId(solidFillPatternId);
+            ogs.SetCutFillColor(clr);
+            ogs.SetCutFillPatternId(solidFillPatternId);
+#else
+            ogs.SetSurfaceForegroundPatternColor(clr);
+            ogs.SetSurfaceForegroundPatternId(solidFillPatternId);
+            ogs.SetCutForegroundPatternColor(clr);
+            ogs.SetCutForegroundPatternId(solidFillPatternId);
+#endif
+
+            view.SetFilterOverrides(filter.Id, ogs);
+        }
+
+
         public static bool CheckIsChangeFiltersAvailable(Document doc, View view)
         {
             ElementId templateId = view.ViewTemplateId;
@@ -113,7 +144,7 @@ namespace RevitViewFilters
             string result = "";
 
             List<ElementId> catIds = catIds0.Distinct().ToList();
-           
+
 
             foreach (ElementId catId in catIds)
             {

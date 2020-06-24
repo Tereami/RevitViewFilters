@@ -21,7 +21,7 @@ using Autodesk.Revit.DB;
 
 namespace RevitViewFilters
 {
-    public class MyParameter : IEquatable<MyParameter>
+    public class MyParameter : IEquatable<MyParameter>, IComparable
     {
         public Parameter RevitParameter { get; }
         public ElementId ParameterId { get; }
@@ -35,6 +35,15 @@ namespace RevitViewFilters
         private ElementId elemIdValue;
 
         public bool HasValue;
+
+        int IComparable.CompareTo(object obj)
+        {
+            string myval = this.AsValueString();
+            string otherval = (obj as MyParameter).AsValueString();
+            int compresult = myval.CompareTo(otherval);
+            return compresult;
+        }
+
 
         //Интерфейсы
         public bool Equals(MyParameter other)

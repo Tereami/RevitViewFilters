@@ -30,7 +30,9 @@ namespace RevitViewFilters
         public List<MyParameter> parameters;
         public MyParameter selectedParameter;
         public CriteriaType criteriaType;
+        public ColorizeMode colorizeMode;
         public int startSymbols;
+        
 
 
         public FormSelectParameterForFilters()
@@ -51,13 +53,22 @@ namespace RevitViewFilters
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-            selectedParameter = comboBoxParameters.SelectedItem as MyParameter;
-            if (selectedParameter == null) throw new Exception("Выбран не MyParameter");
+            if(radioButtonCheckHostMark.Checked)
+            {
+                this.colorizeMode = ColorizeMode.CheckHostmark;
+            }
+
+            if (radioButtonUserParameter.Checked)
+            {
+                this.colorizeMode = ColorizeMode.ByParameter;
+                selectedParameter = comboBoxParameters.SelectedItem as MyParameter;
+                if (selectedParameter == null) throw new Exception("Выбран не MyParameter");
 
 
-            if (radioButtonEquals.Checked) criteriaType = CriteriaType.Equals;
-            if (radioButtonStartsWith.Checked) criteriaType = CriteriaType.StartsWith;
-            startSymbols = (int)numericStartSymbols.Value;
+                if (radioButtonEquals.Checked) criteriaType = CriteriaType.Equals;
+                if (radioButtonStartsWith.Checked) criteriaType = CriteriaType.StartsWith;
+                startSymbols = (int)numericStartSymbols.Value;
+            }
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -74,6 +85,16 @@ namespace RevitViewFilters
             numericStartSymbols.Enabled = true;
             labelSymbols.Enabled = true;
 
+        }
+
+        private void radioButtonUserParameter_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox1.Enabled = true;
+        }
+
+        private void radioButtonCheckHostMark_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox1.Enabled = false;
         }
     }
 }
