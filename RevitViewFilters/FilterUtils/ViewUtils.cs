@@ -171,20 +171,20 @@ namespace RevitViewFilters
             return catsIds;
         }
 
-        private static string GetParamName(Document doc, ElementId id)
+        public static string GetParamName(Document doc, ElementId paramId)
         {
             string paramName = "error";
-            if (id.IntegerValue < 0)
+            if (paramId.IntegerValue < 0)
             {
-                paramName = LabelUtils.GetLabelFor((BuiltInParameter)id.IntegerValue);
+                paramName = LabelUtils.GetLabelFor((BuiltInParameter)paramId.IntegerValue);
             }
             else
             {
-                paramName = doc.GetElement(id).Name;
+                paramName = doc.GetElement(paramId).Name;
             }
             if (paramName != "error") return paramName;
 
-            throw new Exception("Id не является идентификатором параметра: " + id.IntegerValue.ToString());
+            throw new Exception("Id не является идентификатором параметра: " + paramId.IntegerValue.ToString());
         }
 
     }

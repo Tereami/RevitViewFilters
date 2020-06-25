@@ -65,52 +65,93 @@ namespace RevitViewFilters
 
         public static ParameterFilterElement CreateConstrFilter(Document doc, List<ElementId> catsIds, Parameter markParam, string mark, string filterNamePrefix)
         {
-            FilterRule markEquals = ParameterFilterRuleFactory.CreateEqualsRule(markParam.Id, mark, true);
-            ElementParameterFilter epf = new ElementParameterFilter(markEquals);
-
             string filterName = filterNamePrefix + "_Конструкция " + mark;
 
             ParameterFilterElement filter = DocumentGetter.GetFilterByName(doc, filterName);
             if (filter != null)
                 return filter;
 
+            FilterRule markEquals = ParameterFilterRuleFactory.CreateEqualsRule(markParam.Id, mark, true);
+
+#if R2017 || R2018
+            filter = ParameterFilterElement.Create(doc, filterName, catsIds);
+            filter.SetRules(new List<FilterRule> { markEquals });
+#else
+            ElementParameterFilter epf = new ElementParameterFilter(markEquals);
             filter = ParameterFilterElement.Create(doc, filterName, catsIds, epf);
+#endif
             return filter;
         }
 
         public static ParameterFilterElement CreateRebarHostFilter(
-            Document doc, Parameter rebarIsFamilyParam, Parameter rebarHostParam, Parameter rebarMrkParam,
-            string hostMark, string filterNamePrefix)
+            Document doc, List<ElementId> rebarCatsIds, Parameter rebarIsFamilyParam, Parameter rebarHostParam, Parameter rebarMrkParam,
+            string hostMark, string filterNamePrefix, RebarFilterMode filterMode)
         {
             string filterName = filterNamePrefix + "_Арм Конструкции " + hostMark;
 
+            if (filterMode == RebarFilterMode.IfcMode)
+                filterName += " IFC";
             ParameterFilterElement filter = DocumentGetter.GetFilterByName(doc, filterName);
             if (filter != null)
                 return filter;
 
-            FilterRule ruleIsNotFamily = ParameterFilterRuleFactory.CreateEqualsRule(rebarIsFamilyParam.Id, 0);
             FilterRule ruleHostEquals = ParameterFilterRuleFactory.CreateEqualsRule(rebarHostParam.Id, hostMark, true);
-            ElementParameterFilter filterByStandardArm = new ElementParameterFilter(new List<FilterRule> { ruleIsNotFamily, ruleHostEquals });
-
-
-            FilterRule ruleIsFamily = ParameterFilterRuleFactory.CreateEqualsRule(rebarIsFamilyParam.Id, 1);
-            FilterRule ruleMrkEquals = ParameterFilterRuleFactory.CreateEqualsRule(rebarMrkParam.Id, hostMark, true);
-            ElementParameterFilter filterForIfcArm = new ElementParameterFilter(new List<FilterRule> { ruleIsFamily, ruleMrkEquals });
-
-
-            LogicalOrFilter orfilter = new LogicalOrFilter(filterByStandardArm, filterForIfcArm);
-
             
 
-            List<ElementId> catsIds = new List<ElementId>();
-            catsIds.Add(new ElementId(BuiltInCategory.OST_Rebar));
-            catsIds.Add(new ElementId(BuiltInCategory.OST_AreaRein));
-            catsIds.Add(new ElementId(BuiltInCategory.OST_PathRein));
+            
+            if (filterMode == RebarFilterMode.SingleMode)
+            {
+#if R2017 || R2018
+                filter = ParameterFilterElement.Create(doc, filterName, rebarCatsIds);
+                filter.SetRules(new List<FilterRule> { ruleHostEquals });
+#else
+                ElementParameterFilter epf = new ElementParameterFilter(ruleHostEquals);
+                filter = ParameterFilterElement.Create(doc, filterName, rebarCatsIds, epf);
+#endif
+                return filter;
+            }
+
+            FilterRule ruleIsNotFamily = ParameterFilterRuleFactory.CreateEqualsRule(rebarIsFamilyParam.Id, 0);
+            FilterRule ruleIsFamily = ParameterFilterRuleFactory.CreateEqualsRule(rebarIsFamilyParam.Id, 1);
+            FilterRule ruleMrkEquals = ParameterFilterRuleFactory.CreateEqualsRule(rebarMrkParam.Id, hostMark, true);
 
 
-            filter = ParameterFilterElement.Create(doc, filterName, catsIds, orfilter);
+#if R2017 || R2018
 
-            return filter;
+            if (filterMode == RebarFilterMode.StandardRebarMode)
+            {
+                filter = ParameterFilterElement.Create(doc, filterName, rebarCatsIds);
+                filter.SetRules(new List<FilterRule> { ruleIsNotFamily, ruleHostEquals });
+                return filter;
+            }
+            else if (filterMode == RebarFilterMode.IfcMode)
+            {
+                filter = ParameterFilterElement.Create(doc, filterName, rebarCatsIds);
+                filter.SetRules(new List<FilterRule> { ruleIsFamily, ruleMrkEquals });
+                return filter;
+            }
+
+#else
+            if (filterMode == RebarFilterMode.DoubleMode)
+            {
+                ElementParameterFilter filterByStandardArm = new ElementParameterFilter(new List<FilterRule> { ruleIsNotFamily, ruleHostEquals });
+                ElementParameterFilter filterForIfcArm = new ElementParameterFilter(new List<FilterRule> { ruleIsFamily, ruleMrkEquals });
+                LogicalOrFilter orfilter = new LogicalOrFilter(filterByStandardArm, filterForIfcArm);
+                filter = ParameterFilterElement.Create(doc, filterName, rebarCatsIds, orfilter);
+                return filter;
+            }
+#endif
+
+
+
+            //rebarCatsIds.Add(new ElementId(BuiltInCategory.OST_Rebar));
+            //rebarCatsIds.Add(new ElementId(BuiltInCategory.OST_AreaRein));
+            //rebarCatsIds.Add(new ElementId(BuiltInCategory.OST_PathRein));
+
+
+
+
+            return null;
         }
 
 

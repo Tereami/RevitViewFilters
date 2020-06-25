@@ -12,6 +12,6 @@ namespace RevitViewFilters
         int ValuesCount { get; }
         string FilterNamePrefix { get; }
         bool ApplyFilters(Document doc, View v, ElementId fillPatternId);
-        string CollectValues(Document doc, View v);
+        MyResult CollectValues(Document doc, View v);
     }
 }

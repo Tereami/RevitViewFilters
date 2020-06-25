@@ -72,12 +72,21 @@ namespace RevitViewFilters
                 filterData = new FilterDataForRebars(doc);
             }
 
-            string collectMessage = filterData.CollectValues(doc, curView);
-            if (!string.IsNullOrEmpty(collectMessage))
+            MyResult collectResult = filterData.CollectValues(doc, curView);
+            if(collectResult.ResultType == ResultType.cancel)
             {
-                message = collectMessage;
                 return Result.Cancelled;
             }
+            else if(collectResult.ResultType == ResultType.error)
+            {
+                message = collectResult.Message;
+                return Result.Failed;
+            }
+            else if (collectResult.ResultType == ResultType.warning)
+            {
+                TaskDialog.Show("Внимание", collectResult.Message);
+            }
+
 
             if (filterData.ValuesCount > 64)
             {

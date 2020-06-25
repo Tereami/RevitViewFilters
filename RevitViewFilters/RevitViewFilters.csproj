@@ -191,12 +191,14 @@
   <ItemGroup>
     <Compile Include="AppBatchFilterCreation.cs" />
     <Compile Include="Colorize\ColorsCollection.cs" />
+    <Compile Include="Colorize\Enums\RebarFilterMode.cs" />
     <Compile Include="Colorize\FilterData\FilterDataSimple.cs" />
     <Compile Include="Colorize\FilterData\IFilterData.cs" />
     <Compile Include="CommandBatchDelete.cs" />
     <Compile Include="CommandCreate.cs" />
     <Compile Include="CommandViewColoring.cs" />
     <Compile Include="CommandWallHatch.cs" />
+    <Compile Include="FilterUtils\MyResult.cs" />
     <Compile Include="Getters\DocumentGetter.cs" />
     <Compile Include="Colorize\Enums\ColorizeMode.cs" />
     <Compile Include="Colorize\Enums\CriteriaType.cs" />

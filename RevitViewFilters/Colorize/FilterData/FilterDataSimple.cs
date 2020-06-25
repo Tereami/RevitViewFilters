@@ -63,13 +63,18 @@ namespace RevitViewFilters
 
         }
 
-        public string CollectValues(Document doc, View v)
+        public MyResult CollectValues(Document doc, View v)
         {
+            MyResult result = new MyResult(ResultType.ok, "");
             if (catsIds.Count > 1)
             {
                 FormSelectCategories formSelCats = new FormSelectCategories(doc, catsIds);
                 if (formSelCats.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                    return "Отменено пользователем";
+                {
+                    result.ResultType = ResultType.cancel;
+                    return result;
+                }
+                    
                 catsIds = formSelCats.checkedCategoriesIds;
 
                 //перефильтрую элементы после того как перевыбрал категории
@@ -79,8 +84,8 @@ namespace RevitViewFilters
             catsName = ViewUtils.GetCategoriesName(doc, catsIds);
 
             valuesList = DocumentGetter.GetParameterValues(doc, elems, paramName, startSymbols);
-            
-            return string.Empty;
+
+            return result;
         }
     }
 }
