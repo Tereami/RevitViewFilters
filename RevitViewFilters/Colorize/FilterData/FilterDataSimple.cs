@@ -38,7 +38,7 @@ namespace RevitViewFilters
                 startSymbols = StartSymbols;
         }
 
-        public bool ApplyFilters(Document doc, View v, ElementId fillPatternId)
+        public bool ApplyFilters(Document doc, View v, ElementId fillPatternId, bool colorLines, bool colorFill)
         {
             for (int i = 0; i < valuesList.Count; i++)
             {
@@ -56,16 +56,16 @@ namespace RevitViewFilters
                 if (filter == null) continue;
 
 
-                ViewUtils.ApplyViewFilter(doc, v, filter, fillPatternId, i);
+                ViewUtils.ApplyViewFilter(doc, v, filter, fillPatternId, i, colorLines, colorFill);
 
             }
             return true;
 
         }
 
-        public MyResult CollectValues(Document doc, View v)
+        public MyDialogResult CollectValues(Document doc, View v)
         {
-            MyResult result = new MyResult(ResultType.ok, "");
+            MyDialogResult result = new MyDialogResult(ResultType.ok, "");
             if (catsIds.Count > 1)
             {
                 FormSelectCategories formSelCats = new FormSelectCategories(doc, catsIds);

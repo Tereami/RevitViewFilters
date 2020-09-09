@@ -32,7 +32,8 @@ namespace RevitViewFilters
         public CriteriaType criteriaType;
         public ColorizeMode colorizeMode;
         public int startSymbols;
-        
+        public bool colorLines;
+        public bool colorFill;
 
 
         public FormSelectParameterForFilters()
@@ -69,6 +70,9 @@ namespace RevitViewFilters
                 if (radioButtonStartsWith.Checked) criteriaType = CriteriaType.StartsWith;
                 startSymbols = (int)numericStartSymbols.Value;
             }
+
+            this.colorLines = checkBoxColorLines.Checked;
+            this.colorFill = checkBoxColorFill.Checked;
 
             this.DialogResult = DialogResult.OK;
             this.Close();

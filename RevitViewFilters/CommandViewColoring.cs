@@ -72,7 +72,7 @@ namespace RevitViewFilters
                 filterData = new FilterDataForRebars(doc);
             }
 
-            MyResult collectResult = filterData.CollectValues(doc, curView);
+            MyDialogResult collectResult = filterData.CollectValues(doc, curView);
             if(collectResult.ResultType == ResultType.cancel)
             {
                 return Result.Cancelled;
@@ -111,7 +111,7 @@ namespace RevitViewFilters
                     }
                 }
 
-                filterData.ApplyFilters(doc, curView, solidFillPatternId);
+                filterData.ApplyFilters(doc, curView, solidFillPatternId, form1.colorLines, form1.colorFill);
                 
 
                 t.Commit();

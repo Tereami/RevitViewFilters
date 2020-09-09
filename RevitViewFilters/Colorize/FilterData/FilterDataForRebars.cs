@@ -47,44 +47,44 @@ namespace RevitViewFilters
         private string _filterNamePrefix = "_rh_";
         public string FilterNamePrefix => _filterNamePrefix;
 
-        public bool ApplyFilters(Document doc, View v, ElementId fillPatternId)
+        public bool ApplyFilters(Document doc, View v, ElementId fillPatternId, bool colorLines, bool colorFill)
         {
             for (int i = 0; i < values.Count; i++)
             {
                 string val = values[i];
 
                 ParameterFilterElement filterConstr = FilterCreator.CreateConstrFilter(doc, catIdConstructions, markParam, val, _filterNamePrefix);
-                ViewUtils.ApplyViewFilter(doc, v, filterConstr, fillPatternId, i);
+                ViewUtils.ApplyViewFilter(doc, v, filterConstr, fillPatternId, i, colorLines, colorFill);
 
 
                 if (!_rebarIsFamilyParamExists)
                 {
                     ParameterFilterElement filterRebarSingleMode = FilterCreator
                     .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.SingleMode);
-                    ViewUtils.ApplyViewFilter(doc, v, filterRebarSingleMode, fillPatternId, i);
+                    ViewUtils.ApplyViewFilter(doc, v, filterRebarSingleMode, fillPatternId, i, colorLines, colorFill);
                     continue;
                 }
 
 #if R2017 || R2018
                 ParameterFilterElement filterRebarStandardRebar = FilterCreator
                     .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.StandardRebarMode);
-                ViewUtils.ApplyViewFilter(doc, v, filterRebarStandardRebar, fillPatternId, i);
+                ViewUtils.ApplyViewFilter(doc, v, filterRebarStandardRebar, fillPatternId, i, colorLines, colorFill);
 
                 ParameterFilterElement filterRebarIfcRebar = FilterCreator
                     .CreateRebarHostFilter(doc, new List<ElementId> { new ElementId(BuiltInCategory.OST_Rebar) }, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.IfcMode);
-                ViewUtils.ApplyViewFilter(doc, v, filterRebarIfcRebar, fillPatternId, i);
+                ViewUtils.ApplyViewFilter(doc, v, filterRebarIfcRebar, fillPatternId, i, colorLines, colorFill);
 #else
                 ParameterFilterElement filterRebarOrStyle = FilterCreator
                     .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.DoubleMode);
-                ViewUtils.ApplyViewFilter(doc, v, filterRebarOrStyle, fillPatternId, i);
+                ViewUtils.ApplyViewFilter(doc, v, filterRebarOrStyle, fillPatternId, i, colorLines, colorFill);
 #endif
             }
             return true;
         }
 
-        public MyResult CollectValues(Document doc, View v)
+        public MyDialogResult CollectValues(Document doc, View v)
         {
-            MyResult result = new MyResult(ResultType.ok, "");
+            MyDialogResult result = new MyDialogResult(ResultType.ok, "");
             catIdRebar = new List<ElementId> {
                 new ElementId(BuiltInCategory.OST_Rebar),
                 new ElementId(BuiltInCategory.OST_AreaRein),

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace RevitViewFilters
 {
     public enum ResultType { ok, warning, cancel, error}
-    public class MyResult
+    public class MyDialogResult
     {
         public ResultType ResultType;
         public string Message;
 
-        public MyResult(ResultType Result, string Message)
+        public MyDialogResult(ResultType Result, string Message)
         {
             ResultType = Result;
             this.Message = Message;

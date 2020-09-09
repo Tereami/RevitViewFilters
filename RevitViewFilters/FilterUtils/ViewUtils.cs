@@ -23,7 +23,7 @@ namespace RevitViewFilters
 {
     public static class ViewUtils
     {
-        public static void ApplyViewFilter(Document doc, View view, ParameterFilterElement filter, ElementId solidFillPatternId, int colorNumber)
+        public static void ApplyViewFilter(Document doc, View view, ParameterFilterElement filter, ElementId solidFillPatternId, int colorNumber, bool colorLines, bool colorFill)
         {
             view.AddFilter(filter.Id);
             OverrideGraphicSettings ogs = new OverrideGraphicSettings();
@@ -34,9 +34,14 @@ namespace RevitViewFilters
 
             Color clr = new Color(red, green, blue);
 
+            if (colorLines)
+            {
+                ogs.SetProjectionLineColor(clr);
+                ogs.SetCutLineColor(clr);
+            }
 
-            ogs.SetProjectionLineColor(clr);
-            ogs.SetCutLineColor(clr);
+            if (colorFill)
+            {
 
 #if R2017 || R2018
             ogs.SetProjectionFillColor(clr);
@@ -44,12 +49,12 @@ namespace RevitViewFilters
             ogs.SetCutFillColor(clr);
             ogs.SetCutFillPatternId(solidFillPatternId);
 #else
-            ogs.SetSurfaceForegroundPatternColor(clr);
-            ogs.SetSurfaceForegroundPatternId(solidFillPatternId);
-            ogs.SetCutForegroundPatternColor(clr);
-            ogs.SetCutForegroundPatternId(solidFillPatternId);
+                ogs.SetSurfaceForegroundPatternColor(clr);
+                ogs.SetSurfaceForegroundPatternId(solidFillPatternId);
+                ogs.SetCutForegroundPatternColor(clr);
+                ogs.SetCutForegroundPatternId(solidFillPatternId);
 #endif
-
+            }
             view.SetFilterOverrides(filter.Id, ogs);
         }
 

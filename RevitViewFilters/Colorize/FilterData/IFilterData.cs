@@ -11,7 +11,7 @@ namespace RevitViewFilters
     {
         int ValuesCount { get; }
         string FilterNamePrefix { get; }
-        bool ApplyFilters(Document doc, View v, ElementId fillPatternId);
-        MyResult CollectValues(Document doc, View v);
+        bool ApplyFilters(Document doc, View v, ElementId fillPatternId, bool colorLines, bool colorFill);
+        MyDialogResult CollectValues(Document doc, View v);
     }
 }
