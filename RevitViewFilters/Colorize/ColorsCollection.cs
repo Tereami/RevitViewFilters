@@ -24,7 +24,7 @@ namespace RevitViewFilters
     {
         public static string[] colors = {
             "#00FF00",
-            "#0000FF",
+            "#1900FF",
             "#FF0000",
             "#01FFFE",
             "#FFA6FE",
