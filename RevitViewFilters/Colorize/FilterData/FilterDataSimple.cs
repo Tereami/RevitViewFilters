@@ -68,7 +68,12 @@ namespace RevitViewFilters
             MyDialogResult result = new MyDialogResult(ResultType.ok, "");
             if (catsIds.Count > 1)
             {
-                FormSelectCategories formSelCats = new FormSelectCategories(doc, catsIds);
+                List<MyCategory> mycats = new List<MyCategory>();
+                foreach(ElementId catid in catsIds)
+                {
+                    mycats.Add(new MyCategory(doc, catid));
+                }
+                FormSelectCategories formSelCats = new FormSelectCategories(doc, mycats);
                 if (formSelCats.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 {
                     result.ResultType = ResultType.cancel;

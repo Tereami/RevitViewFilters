@@ -16,15 +16,13 @@ namespace RevitViewFilters
     {
         public List<ElementId> checkedCategoriesIds;
 
-        public FormSelectCategories(Autodesk.Revit.DB.Document doc, List<ElementId> categoriesIds)
+        public FormSelectCategories(Autodesk.Revit.DB.Document doc, List<MyCategory> categories)
         {
             InitializeComponent();
 
-            foreach(ElementId catId in categoriesIds)
+            foreach(MyCategory mycat in categories)
             {
-                Autodesk.Revit.DB.BuiltInCategory bic
-                    = (Autodesk.Revit.DB.BuiltInCategory)catId.IntegerValue;
-                checkedListBox1.Items.Add(bic, CheckState.Checked);
+                checkedListBox1.Items.Add(mycat, CheckState.Checked);
             }
             
         }
@@ -40,10 +38,9 @@ namespace RevitViewFilters
 
             foreach (var checkedItem in checkedListBox1.CheckedItems)
             {
-                Autodesk.Revit.DB.BuiltInCategory cat =  
-                    (Autodesk.Revit.DB.BuiltInCategory)checkedItem;
+                MyCategory mycat =  (MyCategory)checkedItem;
 
-                checkedCategoriesIds.Add(new ElementId(cat));
+                checkedCategoriesIds.Add(new ElementId(mycat.BuiltinCat));
             }
 
             this.DialogResult = DialogResult.OK;

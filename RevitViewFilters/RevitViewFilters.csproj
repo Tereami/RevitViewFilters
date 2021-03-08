@@ -194,6 +194,7 @@
     <Compile Include="Colorize\Enums\RebarFilterMode.cs" />
     <Compile Include="Colorize\FilterData\FilterDataSimple.cs" />
     <Compile Include="Colorize\FilterData\IFilterData.cs" />
+    <Compile Include="Colorize\MyCategory.cs" />
     <Compile Include="CommandBatchDelete.cs" />
     <Compile Include="CommandCreate.cs" />
     <Compile Include="CommandViewColoring.cs" />

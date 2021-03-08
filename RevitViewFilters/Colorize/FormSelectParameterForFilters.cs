@@ -58,8 +58,11 @@ namespace RevitViewFilters
             {
                 this.colorizeMode = ColorizeMode.CheckHostmark;
             }
-
-            if (radioButtonUserParameter.Checked)
+            else if(radioButtonResetColors.Checked)
+            {
+                this.colorizeMode = ColorizeMode.ResetColors;
+            }
+            else if (radioButtonUserParameter.Checked)
             {
                 this.colorizeMode = ColorizeMode.ByParameter;
                 selectedParameter = comboBoxParameters.SelectedItem as MyParameter;

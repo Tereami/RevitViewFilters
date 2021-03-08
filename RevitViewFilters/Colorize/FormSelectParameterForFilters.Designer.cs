@@ -40,8 +40,9 @@
             this.radioButtonCheckHostMark = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBoxColorLines = new System.Windows.Forms.CheckBox();
             this.checkBoxColorFill = new System.Windows.Forms.CheckBox();
+            this.checkBoxColorLines = new System.Windows.Forms.CheckBox();
+            this.radioButtonResetColors = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericStartSymbols)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -60,7 +61,7 @@
             // buttonNext
             // 
             this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNext.Location = new System.Drawing.Point(199, 265);
+            this.buttonNext.Location = new System.Drawing.Point(199, 289);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 2;
@@ -72,7 +73,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(12, 265);
+            this.buttonCancel.Location = new System.Drawing.Point(12, 289);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 3;
@@ -168,14 +169,16 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.radioButtonUserParameter);
             this.groupBox2.Controls.Add(this.groupBox1);
+            this.groupBox2.Controls.Add(this.radioButtonResetColors);
             this.groupBox2.Controls.Add(this.radioButtonCheckHostMark);
             this.groupBox2.Location = new System.Drawing.Point(12, 86);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(261, 171);
+            this.groupBox2.Size = new System.Drawing.Size(261, 195);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Алгоритм";
@@ -193,18 +196,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Графика";
             // 
-            // checkBoxColorLines
-            // 
-            this.checkBoxColorLines.AutoSize = true;
-            this.checkBoxColorLines.Checked = true;
-            this.checkBoxColorLines.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxColorLines.Location = new System.Drawing.Point(7, 20);
-            this.checkBoxColorLines.Name = "checkBoxColorLines";
-            this.checkBoxColorLines.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxColorLines.TabIndex = 0;
-            this.checkBoxColorLines.Text = "Цветные линии";
-            this.checkBoxColorLines.UseVisualStyleBackColor = true;
-            // 
             // checkBoxColorFill
             // 
             this.checkBoxColorFill.AutoSize = true;
@@ -217,13 +208,37 @@
             this.checkBoxColorFill.Text = "Цветная заливка";
             this.checkBoxColorFill.UseVisualStyleBackColor = true;
             // 
+            // checkBoxColorLines
+            // 
+            this.checkBoxColorLines.AutoSize = true;
+            this.checkBoxColorLines.Checked = true;
+            this.checkBoxColorLines.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxColorLines.Location = new System.Drawing.Point(7, 20);
+            this.checkBoxColorLines.Name = "checkBoxColorLines";
+            this.checkBoxColorLines.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxColorLines.TabIndex = 0;
+            this.checkBoxColorLines.Text = "Цветные линии";
+            this.checkBoxColorLines.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonResetColors
+            // 
+            this.radioButtonResetColors.AutoSize = true;
+            this.radioButtonResetColors.Location = new System.Drawing.Point(6, 167);
+            this.radioButtonResetColors.Name = "radioButtonResetColors";
+            this.radioButtonResetColors.Size = new System.Drawing.Size(121, 17);
+            this.radioButtonResetColors.TabIndex = 5;
+            this.radioButtonResetColors.TabStop = true;
+            this.radioButtonResetColors.Text = "Сбросить фильтры";
+            this.radioButtonResetColors.UseVisualStyleBackColor = true;
+            this.radioButtonResetColors.CheckedChanged += new System.EventHandler(this.radioButtonCheckHostMark_CheckedChanged);
+            // 
             // FormSelectParameterForFilters
             // 
             this.AcceptButton = this.buttonNext;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(285, 300);
+            this.ClientSize = new System.Drawing.Size(285, 324);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonCancel);
@@ -259,5 +274,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox checkBoxColorFill;
         private System.Windows.Forms.CheckBox checkBoxColorLines;
+        private System.Windows.Forms.RadioButton radioButtonResetColors;
     }
 }

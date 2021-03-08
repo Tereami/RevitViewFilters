@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace RevitViewFilters
 {
-    public enum ColorizeMode { ByParameter, CheckHostmark }
+    public enum ColorizeMode { ByParameter, CheckHostmark, ResetColors }
 }

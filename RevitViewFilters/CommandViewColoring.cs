@@ -58,7 +58,17 @@ namespace RevitViewFilters
 
 
             IFilterData filterData = null;
-            if (form1.colorizeMode == ColorizeMode.ByParameter)
+            if(form1.colorizeMode == ColorizeMode.ResetColors)
+            {
+                using (Transaction t = new Transaction(doc))
+                {
+                    t.Start("Очистка фильтров");
+                    ClearFilters(doc, curView);
+                    t.Commit();
+                }
+                return Result.Succeeded;
+            }
+            else if (form1.colorizeMode == ColorizeMode.ByParameter)
             {
                 int startSymbols = 0;
                 if (form1.criteriaType == CriteriaType.StartsWith)
@@ -102,14 +112,7 @@ namespace RevitViewFilters
             {
                 t.Start("Колоризация вида");
 
-                foreach (ElementId filterId in curView.GetFilters())
-                {
-                    ParameterFilterElement filter = doc.GetElement(filterId) as ParameterFilterElement;
-                    if (filter.Name.StartsWith(filterData.FilterNamePrefix))
-                    {
-                        curView.RemoveFilter(filterId);
-                    }
-                }
+                ClearFilters(doc, curView);
 
                 filterData.ApplyFilters(doc, curView, solidFillPatternId, form1.colorLines, form1.colorFill);
                 
@@ -118,6 +121,18 @@ namespace RevitViewFilters
             }
 
             return Result.Succeeded;
+        }
+
+        private void ClearFilters(Document doc, View view)
+        {
+            foreach (ElementId filterId in view.GetFilters())
+            {
+                ParameterFilterElement filter = doc.GetElement(filterId) as ParameterFilterElement;
+                if (filter.Name.StartsWith("_"))
+                {
+                    view.RemoveFilter(filterId);
+                }
+            }
         }
     }
 }
