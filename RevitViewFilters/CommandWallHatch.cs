@@ -14,8 +14,7 @@ Zuev Aleksandr, 2020, all rigths reserved.*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
@@ -29,21 +28,26 @@ namespace RevitViewFilters
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            Debug.Listeners.Clear();
+            Debug.Listeners.Add(new RbsLogger.Logger("WallHatch"));
             Document doc = commandData.Application.ActiveUIDocument.Document;
             View curView = doc.ActiveView;
             if (!(curView is ViewPlan))
             {
                 message = "Запуск команды возможен только на плане";
+                Debug.WriteLine(message);
                 return Result.Failed;
             }
 
             if (curView.ViewTemplateId != null && curView.ViewTemplateId != ElementId.InvalidElementId)
             {
                 message = "Для вида применен шаблон. Отключите шаблон вида перед запуском";
+                Debug.WriteLine(message);
                 return Result.Failed;
             }
 
             Selection sel = commandData.Application.ActiveUIDocument.Selection;
+            Debug.WriteLine("Selected elements: " + sel.GetElementIds().Count);
             if (sel.GetElementIds().Count == 0)
             {
                 message = "Не выбраны стены.";
@@ -56,7 +60,7 @@ namespace RevitViewFilters
                 if (w == null) continue;
                 walls.Add(w);
             }
-
+            Debug.WriteLine("Walls count: " + walls.Count);
             if (walls.Count == 0)
             {
                 message = "Не выбраны стены.";
@@ -64,11 +68,19 @@ namespace RevitViewFilters
             }
 
             SortedDictionary<double, List<Wall>> wallHeigthDict = new SortedDictionary<double, List<Wall>>();
-            if (wallHeigthDict.Count > 10) throw new Exception("Слишком много типов стен! Должно быть не более 10");
+            if (wallHeigthDict.Count > 10)
+            {
+                message = "Слишком много типов стен! Должно быть не более 10";
+                Debug.WriteLine(message);
+                return Result.Failed;
+            }
 
             foreach (Wall w in walls)
             {
+                Debug.WriteLine("Current wall id:" + w.Id.IntegerValue);
                 double topElev = GetWallTopElev(doc, w, true);
+                Debug.WriteLine("Top elevation: " + topElev.ToString("F1"));
+
                 if (wallHeigthDict.ContainsKey(topElev))
                 {
                     wallHeigthDict[topElev].Add(w);
@@ -94,9 +106,11 @@ namespace RevitViewFilters
                         curView.RemoveFilter(filterId);
                     }
                 }
+                Debug.WriteLine("Old filters deleted");
 
                 foreach (var kvp in wallHeigthDict)
                 {
+                    Debug.WriteLine("Current key: " + kvp.Key.ToString("F1"));
                     ElementId hatchId = GetHatchIdByNumber(doc, i);
                     ImageType image = GetImageTypeByNumber(doc, i);
 
@@ -131,24 +145,17 @@ namespace RevitViewFilters
                     ogs.SetSurfaceForegroundPatternId(hatchId);
                     ogs.SetCutForegroundPatternId(hatchId);
 #endif
-
                     curView.SetFilterOverrides(filter.Id, ogs);
                     i++;
                 }
                 t.Commit();
             }
-
-
             return Result.Succeeded;
         }
 
-
-
-
-
-
         private double GetWallTopElev(Document doc, Wall w, bool TopOrBottomElev)
         {
+            Debug.WriteLine("Try to get wall top elevation, wall id: " + w.Id.IntegerValue);
             ElementId levelId = w.LevelId;
             if (levelId == null || levelId == ElementId.InvalidElementId)
                 throw new Exception("У стены нет базового уровня! ID стены: " + w.Id.IntegerValue.ToString());
@@ -156,8 +163,6 @@ namespace RevitViewFilters
             Level lev = doc.GetElement(levelId) as Level;
             double levElev = lev.ProjectElevation;
             double baseOffset = w.get_Parameter(BuiltInParameter.WALL_BASE_OFFSET).AsDouble();
-
-
 
             double elev = levElev + baseOffset; // + wallHeigth;
 
@@ -176,6 +181,7 @@ namespace RevitViewFilters
         private ElementId GetHatchIdByNumber(Document doc, int number)
         {
             string hatchName = GetHatchNameByNumber(doc, number);
+            Debug.WriteLine("Hatch name: " + hatchName);
             ElementId hatchId = GetHatchIdByName(doc, hatchName);
             return hatchId;
         }
@@ -203,16 +209,19 @@ namespace RevitViewFilters
                 .Where(i => i.Name.Contains(hatchName))
                 .Cast<FillPatternElement>()
                 .ToList();
-            if (fpes.Count == 0) throw new Exception("Не удалось найти штриховку " + hatchName);
+            if (fpes.Count == 0)
+            {
+                Debug.WriteLine("Unable to find hatch: " + hatchName);
+                throw new Exception("Не удалось найти штриховку " + hatchName);
+            }
+            Debug.WriteLine("Hatch found: " + fpes.First().Id.IntegerValue);
             return fpes.First().Id;
         }
-
-
-
 
         private ImageType GetImageTypeByNumber(Document doc, int number)
         {
             string name = "ШтриховкаСтены_" + number.ToString() + ".png";
+            Debug.WriteLine("Try to find image: " + name);
 
             List<ImageType> images = new FilteredElementCollector(doc)
                 .OfClass(typeof(ImageType))
@@ -229,16 +238,15 @@ namespace RevitViewFilters
                     .ToList();
                 if (errImgs.Count == 0)
                 {
+                    Debug.WriteLine("No wall images in the project");
                     throw new Exception("Загрузите в проект картинки!");
                 }
 
                 ImageType errImg = errImgs.First();
                 return errImg;
             }
-
+            Debug.WriteLine("Image found, id: " + images.First().Id.IntegerValue);
             return images.First();
         }
-
-
     }
 }

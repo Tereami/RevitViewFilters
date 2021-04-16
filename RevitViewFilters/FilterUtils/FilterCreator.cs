@@ -59,7 +59,6 @@ namespace RevitViewFilters
                 catch { }
 
             }
-
             return filter;
         }
 
@@ -96,8 +95,6 @@ namespace RevitViewFilters
                 return filter;
 
             FilterRule ruleHostEquals = ParameterFilterRuleFactory.CreateEqualsRule(rebarHostParam.Id, hostMark, true);
-            
-
             
             if (filterMode == RebarFilterMode.SingleMode)
             {
@@ -141,16 +138,6 @@ namespace RevitViewFilters
                 return filter;
             }
 #endif
-
-
-
-            //rebarCatsIds.Add(new ElementId(BuiltInCategory.OST_Rebar));
-            //rebarCatsIds.Add(new ElementId(BuiltInCategory.OST_AreaRein));
-            //rebarCatsIds.Add(new ElementId(BuiltInCategory.OST_PathRein));
-
-
-
-
             return null;
         }
 
