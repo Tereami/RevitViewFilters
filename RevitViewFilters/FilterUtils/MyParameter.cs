@@ -93,6 +93,9 @@ namespace RevitViewFilters
             RevitStorageType = revitParameter.StorageType;
             HasValue = false;
 
+            if(!revitParameter.HasValue)
+                return;
+
             switch (revitParameter.StorageType)
             {
                 case StorageType.None:

@@ -33,20 +33,12 @@ namespace RevitViewFilters
     public class AppBatchFilterCreation : IExternalApplication
     {
         public static string assemblyPath = "";
-        public static string iconsPath
-        {
-            get
-            {
-                string s = Path.Combine(Path.GetDirectoryName(assemblyPath), "icons");
-                return s;
-            }
-        }
 
         Result IExternalApplication.OnStartup(UIControlledApplication application)
         {
             assemblyPath = typeof(AppBatchFilterCreation).Assembly.Location;
 
-            string tabName = "Weandrevit";
+            string tabName = "BIM-STARTER TEST";
             try { application.CreateRibbonTab(tabName); }
             catch { }
 

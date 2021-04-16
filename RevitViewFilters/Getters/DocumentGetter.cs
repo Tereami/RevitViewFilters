@@ -11,10 +11,17 @@ namespace RevitViewFilters
     {
         public static List<MyParameter> GetParameterValues(Document doc, List<Element> elems, string ParamName, int startSymbols)
         {
+            bool isTypeParam = false;
+            if (ParamName == "Имя типа" || ParamName == "Имя типа")
+            {
+                isTypeParam = true;
+            }
+
             HashSet<MyParameter> values = new HashSet<MyParameter>(); //список значений параметра
             foreach (Element elem in elems)
             {
                 Parameter curParam = elem.LookupParameter(ParamName);
+
                 if (curParam == null)
                 {
                     ElementId typeElemId = elem.GetTypeId();
@@ -25,10 +32,18 @@ namespace RevitViewFilters
                     if (curParam == null) continue;
                 }
 
-                if (!curParam.HasValue) continue;
-
                 MyParameter mp = new MyParameter(curParam);
-                if (!mp.HasValue) continue;
+                if (!curParam.HasValue && !isTypeParam)
+                {
+                    continue;
+                }
+                if(isTypeParam)
+                {
+                    Parameter typeParam = elem.get_Parameter(BuiltInParameter.ELEM_TYPE_PARAM);
+                    if (!typeParam.HasValue) continue;
+                    string typeName = typeParam.AsValueString();
+                    mp.Set(typeName);
+                }
 
                 if (startSymbols > 0)
                 {
@@ -45,10 +60,12 @@ namespace RevitViewFilters
                         val = valTemp.Substring(0, startSymbols);
 
                     mp.Set(val);
-
                 }
                 values.Add(mp);
+
+
             }
+
 
             List<MyParameter> listParams = values.ToList();
             listParams.Sort();
