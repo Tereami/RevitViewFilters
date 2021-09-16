@@ -46,7 +46,7 @@ namespace RevitViewFilters
                 }
 
                 MyParameter mp = new MyParameter(curParam);
-                if (!curParam.HasValue && !isTypeParam)
+                if (!mp.HasValue && !isTypeParam)
                 {
                     continue;
                 }
