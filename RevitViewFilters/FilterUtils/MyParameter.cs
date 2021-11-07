@@ -242,7 +242,8 @@ namespace RevitViewFilters
                 case StorageType.Integer:
                     return intValue.ToString();
                 case StorageType.Double:
-                    return (doubleValue * 304.8).ToString("F0");
+                    double mm = ConvertFromInternal(doubleValue, this.RevitParameter);
+                    return mm.ToString("F0");
                 case StorageType.String:
                     return stringValue;
                 case StorageType.ElementId:
@@ -254,7 +255,7 @@ namespace RevitViewFilters
 
 
 
-        public static void SetValue(Parameter param, string value)
+        /*public static void SetValue(Parameter param, string value)
         {
             switch (param.StorageType)
             {
@@ -277,9 +278,9 @@ namespace RevitViewFilters
                 default:
                     break;
             }
-        }
+        }*/
 
-        public static string GetAsString(Parameter param)
+        /*public static string GetAsString(Parameter param)
         {
             switch (param.StorageType)
             {
@@ -289,8 +290,8 @@ namespace RevitViewFilters
                     return param.AsInteger().ToString();
                 case StorageType.Double:
                     double doubleval = param.AsDouble();
-                    doubleval = doubleval * 304.8;
-                    return param.AsDouble().ToString("F1");
+                    double mm = ConvertFromInternal(doubleval, param);
+                    return mm.ToString("F1");
                 case StorageType.String:
                     return param.AsString();
                 case StorageType.ElementId:
@@ -299,7 +300,18 @@ namespace RevitViewFilters
                 default:
                     return "";
             }
-        }
+        }*/
 
+        public static double ConvertFromInternal(double val, Parameter param)
+        {
+#if R2022
+            ForgeTypeId forgeType = param.GetUnitTypeId();
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, forgeType);
+            string unittype = forgeType.TypeId;
+#else
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
+#endif
+            return val2;
+        }
     }
 }
