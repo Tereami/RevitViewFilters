@@ -13,6 +13,7 @@ Global
 		R2020|Any CPU = R2020|Any CPU
 		R2021|Any CPU = R2021|Any CPU
 		R2022|Any CPU = R2022|Any CPU
+		R2023|Any CPU = R2023|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -29,6 +30,8 @@ Global
 		{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}.R2021|Any CPU.Build.0 = R2021|Any CPU
 		{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}.R2022|Any CPU.ActiveCfg = R2022|Any CPU
 		{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}.R2022|Any CPU.Build.0 = R2022|Any CPU
+		{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}.R2023|Any CPU.ActiveCfg = R2023|Any CPU
+		{CA8DE30C-7493-4B17-AD21-1CC0D8F4B2CE}.R2023|Any CPU.Build.0 = R2023|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -304,12 +304,11 @@ namespace RevitViewFilters
 
         public static double ConvertFromInternal(double val, Parameter param)
         {
-#if R2022
+#if R2017 || R2018 || R2019 || R2020 || R2021
+            double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
+#else
             ForgeTypeId forgeType = param.GetUnitTypeId();
             double val2 = UnitUtils.ConvertFromInternalUnits(val, forgeType);
-            string unittype = forgeType.TypeId;
-#else
-            double val2 = UnitUtils.ConvertFromInternalUnits(val, param.DisplayUnitType);
 #endif
             return val2;
         }
