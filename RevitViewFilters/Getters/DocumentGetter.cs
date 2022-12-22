@@ -75,18 +75,12 @@ namespace RevitViewFilters
                     mp.Set(val);
                 }
                 values.Add(mp);
-
-
             }
-
 
             List<MyParameter> listParams = values.ToList();
             listParams.Sort();
             return listParams;
-
         }
-
-
 
         public static ElementId GetSolidFillPatternId(Document doc)
         {
@@ -111,6 +105,4 @@ namespace RevitViewFilters
             return filters.First();
         }
     }
-
-
 }

@@ -35,13 +35,16 @@ namespace RevitViewFilters
         {
             Document doc = commandData.Application.ActiveUIDocument.Document;
             AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string dllPath = Path.GetDirectoryName(AppBatchFilterCreation.assemblyPath);
+            string dllFolder = Path.GetDirectoryName(AppBatchFilterCreation.assemblyPath);
+            string xmlFolder = Path.Combine(dllFolder, "RevitViewFilters_data");
+            string ver = System.IO.File.GetLastWriteTime(AppBatchFilterCreation.assemblyPath).ToString();
+
 
             OpenFileDialog openCsvDialog = new OpenFileDialog();
             openCsvDialog.Filter = "CSV file|*.csv";
-            openCsvDialog.Title = "Выберите файл CSV (v2018.10.17)";
+            openCsvDialog.Title = "Выберите файл CSV ver. " + ver;
             openCsvDialog.Multiselect = false;
-            openCsvDialog.InitialDirectory = dllPath;
+            openCsvDialog.InitialDirectory = xmlFolder;
 
             if (openCsvDialog.ShowDialog() != DialogResult.OK)
                 return Result.Cancelled; ;
@@ -53,6 +56,8 @@ namespace RevitViewFilters
             string msg = "";
             int filterCount = 0;
 
+            CategoriesCollection catCol = new CategoriesCollection(doc);
+
             //одна строка в файле - один фильтр
             foreach (string[] line in data)
             {
@@ -63,7 +68,7 @@ namespace RevitViewFilters
                 List<ElementId> catIds = new List<ElementId>();
                 foreach (string stringCat in filterSource.Categories)
                 {
-                    BuiltInCategory cat = GetBuiltinCategory.GetCategoryByRussianName(stringCat);
+                    BuiltInCategory cat = catCol.GetCategoryByName(stringCat);
                     catIds.Add(new ElementId(cat));
                 }
 
@@ -77,8 +82,8 @@ namespace RevitViewFilters
                     string function = sourceRule[1];
                     string value = sourceRule[2];
 
-
-                    BuiltInCategory cat = GetBuiltinCategory.GetCategoryByRussianName(filterSource.Categories[0]);
+                    string catName = filterSource.Categories[0];
+                    BuiltInCategory cat = catCol.GetCategoryByName(catName);
                     if (cat == BuiltInCategory.OST_Sections || cat == BuiltInCategory.OST_Elev || cat == BuiltInCategory.OST_Callouts)
                         cat = BuiltInCategory.OST_Views;
 

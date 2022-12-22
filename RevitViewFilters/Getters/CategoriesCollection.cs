@@ -23,8 +23,43 @@ using Autodesk.Revit.UI;
 
 namespace RevitViewFilters
 {
-    public static class GetBuiltinCategory
+    public class CategoriesCollection
     {
+        public Dictionary<string, BuiltInCategory> categories;
+
+        public CategoriesCollection(Document doc)
+        {
+            categories = new Dictionary<string, BuiltInCategory>();
+
+            Categories cats = doc.Settings.Categories;
+
+            var iterator = cats.GetEnumerator();
+            iterator.Reset();
+            while (iterator.MoveNext())
+            {
+                Category cat = iterator.Current as Category;
+                if (cat == null) continue;
+                BuiltInCategory bic = (BuiltInCategory)cat.Id.IntegerValue;
+                string catname = cat.Name;
+                categories.Add(catname, bic);
+            }
+        }
+
+        public BuiltInCategory GetCategoryByName(string name)
+        {
+            BuiltInCategory bic = BuiltInCategory.INVALID;
+            if (categories.ContainsKey(name))
+            {
+                bic = categories[name];
+            }
+            else
+            {
+                throw new Exception("Incorrect category: " + name);
+            }
+            return bic;
+        }
+
+        /*
         public static BuiltInCategory GetCategoryByRussianName(string Name)
         {
             switch (Name)
@@ -263,5 +298,6 @@ namespace RevitViewFilters
             }
 
         }
+        */
     }
 }

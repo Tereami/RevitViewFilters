@@ -39,6 +39,9 @@ namespace RevitViewFilters
         public FormSelectParameterForFilters()
         {
             InitializeComponent();
+
+            string ver = System.IO.File.GetLastWriteTime(AppBatchFilterCreation.assemblyPath).ToString();
+            this.Text += " ver." + ver;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

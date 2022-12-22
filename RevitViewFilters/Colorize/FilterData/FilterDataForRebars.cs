@@ -22,13 +22,15 @@ namespace RevitViewFilters
 {
     public class FilterDataForRebars : IFilterData
     {
-        const string rebarIsFamilyParamName = "Арм.ВыполненаСемейством";
-        const string rebarHostParamName = "Метка основы";
-        const string rebarMrkParamName = "Мрк.МаркаКонструкции";
+        //const string rebarIsFamilyParamName = "Арм.ВыполненаСемейством";
+        public Guid rebarIsFamilyParamGuid = new Guid("fc0665b7-63dd-44f2-8805-558177eccfb1");
+        //const string rebarHostParamName = "Метка основы";
+        //const string rebarMrkParamName = "Мрк.МаркаКонструкции";
+        public Guid rebarHostMarkParamGuid = new Guid("5d369dfb-17a2-4ae2-a1a1-bdfc33ba7405");
 
         public Parameter rebarIsFamilyParam;
-        public Parameter rebarHostParam;
-        public Parameter rebarMrkParam;
+        public Parameter rebarHostParamBuiltin;
+        public Parameter rebarHostParamShared;
         public Parameter markParam;
 
         public List<ElementId> catIdRebar;
@@ -36,18 +38,30 @@ namespace RevitViewFilters
 
         public List<string> values;
 
-        public bool _rebarIsFamilyParamExists;
+        public bool _rebarIsFamilyParamExists = false;
 
         public FilterDataForRebars(Document doc)
         {
-            //определю, это шаблоне weandrevit или сторонний
-            List<ElementId> rebarCategoryIds = new List<ElementId> { new ElementId(BuiltInCategory.OST_Rebar) };
-            List<ElementId> paramsRebar = ParameterFilterUtilities.GetFilterableParametersInCommon(doc, rebarCategoryIds).ToList();
-            _rebarIsFamilyParamExists = false;
-            foreach (ElementId paramid in paramsRebar)
+            //define is it weandrevit template or not
+            List<int> projParamsIds = new List<int>();
+            DefinitionBindingMapIterator it = doc.ParameterBindings.ForwardIterator();
+            it.Reset();
+            while (it.MoveNext())
             {
-                string paramName = ViewUtils.GetParamName(doc, paramid);
-                if(paramName == rebarIsFamilyParamName)
+                InternalDefinition def = it.Key as InternalDefinition;
+                if (def == null) continue;
+                projParamsIds.Add(def.Id.IntegerValue);
+            }
+            List<SharedParameterElement> spes = new FilteredElementCollector(doc)
+                .OfClass(typeof(SharedParameterElement))
+                .Cast<SharedParameterElement>()
+                .ToList();
+            foreach (SharedParameterElement spe in spes)
+            {
+                if (!projParamsIds.Contains(spe.Id.IntegerValue))
+                    continue;
+                Guid curGuid = spe.GuidValue;
+                if (curGuid.Equals(rebarIsFamilyParamGuid))
                 {
                     _rebarIsFamilyParamExists = true;
                     break;
@@ -71,30 +85,32 @@ namespace RevitViewFilters
                 ParameterFilterElement filterConstr = FilterCreator.CreateConstrFilter(doc, catIdConstructions, markParam, val, _filterNamePrefix);
                 ViewUtils.ApplyViewFilter(doc, v, filterConstr, fillPatternId, i, colorLines, colorFill);
 
-                if (!_rebarIsFamilyParamExists)
+                if (_rebarIsFamilyParamExists)
+                {
+#if R2017 || R2018
+                    ParameterFilterElement filterRebarStandardRebar = FilterCreator
+                        .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.StandardRebarMode);
+                    ViewUtils.ApplyViewFilter(doc, v, filterRebarStandardRebar, fillPatternId, i, colorLines, colorFill);
+                    Debug.WriteLine("Filter created and applied to view: " + filterRebarStandardRebar.Name);
+
+                    ParameterFilterElement filterRebarIfcRebar = FilterCreator
+                        .CreateRebarHostFilter(doc, new List<ElementId> { new ElementId(BuiltInCategory.OST_Rebar) }, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.IfcMode);
+                    ViewUtils.ApplyViewFilter(doc, v, filterRebarIfcRebar, fillPatternId, i, colorLines, colorFill);
+                    Debug.WriteLine("Filter created and applied to view: " + filterRebarIfcRebar.Name);
+#else
+                    ParameterFilterElement filterRebarOrStyle = FilterCreator
+                        .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.DoubleMode);
+                    ViewUtils.ApplyViewFilter(doc, v, filterRebarOrStyle, fillPatternId, i, colorLines, colorFill);
+                    Debug.WriteLine("Filter created and applied to view: " + filterRebarOrStyle.Name);
+#endif
+                }
+                else
                 {
                     ParameterFilterElement filterRebarSingleMode = FilterCreator
-                    .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.SingleMode);
+                        .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.SingleMode);
                     ViewUtils.ApplyViewFilter(doc, v, filterRebarSingleMode, fillPatternId, i, colorLines, colorFill);
                     continue;
                 }
-
-#if R2017 || R2018
-                ParameterFilterElement filterRebarStandardRebar = FilterCreator
-                    .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.StandardRebarMode);
-                ViewUtils.ApplyViewFilter(doc, v, filterRebarStandardRebar, fillPatternId, i, colorLines, colorFill);
-                Debug.WriteLine("Filter created and applied to view: " + filterRebarStandardRebar.Name);
-
-                ParameterFilterElement filterRebarIfcRebar = FilterCreator
-                    .CreateRebarHostFilter(doc, new List<ElementId> { new ElementId(BuiltInCategory.OST_Rebar) }, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.IfcMode);
-                ViewUtils.ApplyViewFilter(doc, v, filterRebarIfcRebar, fillPatternId, i, colorLines, colorFill);
-                Debug.WriteLine("Filter created and applied to view: " + filterRebarIfcRebar.Name);
-#else
-                ParameterFilterElement filterRebarOrStyle = FilterCreator
-                    .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParam, rebarMrkParam, val, _filterNamePrefix, RebarFilterMode.DoubleMode);
-                ViewUtils.ApplyViewFilter(doc, v, filterRebarOrStyle, fillPatternId, i, colorLines, colorFill);
-                Debug.WriteLine("Filter created and applied to view: " + filterRebarOrStyle.Name);
-#endif
             }
             Debug.WriteLine("All filters applied");
             return true;
@@ -129,53 +145,55 @@ namespace RevitViewFilters
 
             foreach (Element e in rebars)
             {
-                //для создания фильтров мне надо взять параметр Марки из любого элемента, можно даже из арматуры
                 if (markParam == null)
                     markParam = e.get_Parameter(BuiltInParameter.ALL_MODEL_MARK);
-
-                Parameter hostParam = e.LookupParameter(rebarHostParamName);
-                if (hostParam == null)
+                
+                Parameter curRebarHostParamBuiltin = e.get_Parameter(BuiltInParameter.REBAR_ELEM_HOST_MARK);
+                if (curRebarHostParamBuiltin != null)
                 {
-                    hostParam = e.LookupParameter(rebarMrkParamName);
-                    if (hostParam == null)
+                    if(rebarHostParamBuiltin == null)
+                        rebarHostParamBuiltin = curRebarHostParamBuiltin;
+
+                    if (curRebarHostParamBuiltin.HasValue)
                     {
-                        continue;
+                        string hostMarkVal = curRebarHostParamBuiltin.AsString();
+                        hostMarksList.Add(hostMarkVal);
                     }
                 }
 
-                string hostMarkVal = hostParam.AsString();
-                if(!string.IsNullOrEmpty(hostMarkVal))
-                    hostMarksList.Add(hostMarkVal);
-
-                if (rebarHostParam == null)
+                if (_rebarIsFamilyParamExists)
                 {
-                    rebarHostParam = e.LookupParameter(rebarHostParamName); ;
-                }
+                    if (rebarIsFamilyParam == null)
+                    {
+                        rebarIsFamilyParam = e.get_Parameter(rebarIsFamilyParamGuid);
+                        if (rebarIsFamilyParam == null)
+                        {
+                            ElementType etype = doc.GetElement(e.GetTypeId()) as ElementType;
+                            rebarIsFamilyParam = etype.get_Parameter(rebarIsFamilyParamGuid);
+                        }
+                    }
 
-                if (!_rebarIsFamilyParamExists)
-                    continue;
+                    Parameter curRebarHostParamShared = e.get_Parameter(rebarHostMarkParamGuid);
+                    if (curRebarHostParamShared != null)
+                    {
+                        if (rebarHostParamShared == null)
+                            rebarHostParamShared = curRebarHostParamShared;
 
-                if (rebarMrkParam == null)
-                {
-                    rebarMrkParam = e.LookupParameter(rebarMrkParamName);
+                        rebarHostParamShared = curRebarHostParamShared;
+                        if(curRebarHostParamShared.HasValue)
+                        {
+                            string hostMarkVal = curRebarHostParamShared.AsString();
+                            hostMarksList.Add(hostMarkVal);
+                        }
+                    }
                 }
-
-                ElementType etype = doc.GetElement(e.GetTypeId()) as ElementType;
-                Parameter armisfamparam = etype.LookupParameter(rebarIsFamilyParamName);
-                if (armisfamparam == null)
-                {
-                    armisfamparam = e.LookupParameter(rebarIsFamilyParamName);
-                    if (armisfamparam == null) continue;
-                }
-                if (rebarIsFamilyParam == null)
-                    rebarIsFamilyParam = armisfamparam;
             }
 
-            if (rebarIsFamilyParam == null)
+            /*if (rebarIsFamilyParam == null)
             {
                 result.ResultType = ResultType.warning;
                 result.Message += "Не найден параметр Арм.ВыполненаСемейством. Фильтры будут созданы только по параметру Метка основы.";
-            }
+            }*/
 
             values = hostMarksList.ToList();
             values.Sort();

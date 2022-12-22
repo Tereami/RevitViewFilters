@@ -42,6 +42,9 @@ namespace RevitViewFilters
         public FormBatchDelete()
         {
             InitializeComponent();
+
+            string ver = System.IO.File.GetLastWriteTime(AppBatchFilterCreation.assemblyPath).ToString();
+            this.Text += " ver." + ver;
         }
 
         private void FormBatchDelete_Load(object sender, EventArgs e)

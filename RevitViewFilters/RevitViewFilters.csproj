@@ -102,7 +102,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="RbsLogger">
-      <HintPath>..\..\..\RbsLogger\RbsLogger\bin\Debug\RbsLogger.dll</HintPath>
+      <HintPath>..\..\RbsLogger\RbsLogger\bin\Debug\RbsLogger.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -228,7 +228,7 @@
         </Reference>
       </ItemGroup>
     </When>
-	<When Condition=" '$(Configuration)'=='R2023' ">
+    <When Condition=" '$(Configuration)'=='R2023' ">
       <ItemGroup>
         <Reference Include="RevitAPI">
           <HintPath>C:\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
@@ -280,7 +280,7 @@
     <Compile Include="Colorize\FormSelectParameterForFilters.Designer.cs">
       <DependentUpon>FormSelectParameterForFilters.cs</DependentUpon>
     </Compile>
-    <Compile Include="Getters\GetBuiltinCategory.cs" />
+    <Compile Include="Getters\CategoriesCollection.cs" />
     <Compile Include="FilterUtils\MyParameter.cs" />
     <Compile Include="CsvReaders\ReadDataFromCSV.cs" />
     <Compile Include="FilterUtils\FilterCreator.cs" />
