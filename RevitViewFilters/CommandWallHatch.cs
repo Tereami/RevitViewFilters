@@ -28,6 +28,9 @@ namespace RevitViewFilters
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            Guid topElevParamGuid = new Guid("ec353104-09f1-44f4-85cf-1d638dce02d3");
+            Guid bottomElevParamGuid = new Guid("8a58ad74-0e15-499b-bcaf-35b45cd7fc1f");
+
             Debug.Listeners.Clear();
             Debug.Listeners.Add(new RbsLogger.Logger("WallHatch"));
             AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -36,14 +39,14 @@ namespace RevitViewFilters
             View curView = doc.ActiveView;
             if (!(curView is ViewPlan))
             {
-                message = "Запуск команды возможен только на плане";
+                message = MyStrings.ErrorOnlyViewplan;
                 Debug.WriteLine(message);
                 return Result.Failed;
             }
 
             if (curView.ViewTemplateId != null && curView.ViewTemplateId != ElementId.InvalidElementId)
             {
-                message = "Для вида применен шаблон. Отключите шаблон вида перед запуском";
+                message = MyStrings.ErrorViewTemplate;
                 Debug.WriteLine(message);
                 return Result.Failed;
             }
@@ -52,7 +55,7 @@ namespace RevitViewFilters
             Debug.WriteLine("Selected elements: " + sel.GetElementIds().Count);
             if (sel.GetElementIds().Count == 0)
             {
-                message = "Не выбраны стены.";
+                message = MyStrings.ErrorWallsNotSelected;
                 return Result.Failed;
             }
             List<Wall> walls = new List<Wall>();
@@ -65,14 +68,14 @@ namespace RevitViewFilters
             Debug.WriteLine("Walls count: " + walls.Count);
             if (walls.Count == 0)
             {
-                message = "Не выбраны стены.";
+                message = MyStrings.ErrorWallsNotSelected;
                 return Result.Failed;
             }
 
             SortedDictionary<double, List<Wall>> wallHeigthDict = new SortedDictionary<double, List<Wall>>();
             if (wallHeigthDict.Count > 10)
             {
-                message = "Слишком много типов стен! Должно быть не более 10";
+                message = MyStrings.ErrorWallsMoreThan10;
                 Debug.WriteLine(message);
                 return Result.Failed;
             }
@@ -98,7 +101,7 @@ namespace RevitViewFilters
             int i = 1;
             using (Transaction t = new Transaction(doc))
             {
-                t.Start("Отметки стен");
+                t.Start(MyStrings.TransactionWallsElevation);
 
                 foreach (ElementId filterId in curView.GetFilters())
                 {
@@ -124,16 +127,25 @@ namespace RevitViewFilters
                     foreach (Wall w in curWalls)
                     {
                         w.get_Parameter(BuiltInParameter.ALL_MODEL_IMAGE).Set(image.Id);
-                        w.LookupParameter("Рзм.ОтметкаВерха").Set(curHeigthFt);
+                        Parameter topElevParam = w.get_Parameter(topElevParamGuid);
+                        if (topElevParam == null) 
+                            throw new Exception(MyStrings.ErrorNoTopElevParam);
+
+                       topElevParam.Set(curHeigthFt);
 
                         double bottomElev = GetWallTopElev(doc, w, false);
                         double bottomElevFt = bottomElev / 304.8;
-                        w.LookupParameter("Рзм.ОтметкаНиза").Set(bottomElevFt);
+                        Parameter bottomElevParam = w.get_Parameter(bottomElevParamGuid);
+                        if (bottomElevParam == null)
+                            throw new Exception(MyStrings.ErrorNoBottomElevParam);
+
+                        bottomElevParam.Set(bottomElevFt);
                     }
 
-                    string filterName = "_cwh_" + "Стены Рзм.ОтметкаВерха равно " + curHeigthMm.ToString("F0");
+                    string filterName = "_cwh_" + MyStrings.FilterTitleWallTopElev + curHeigthMm.ToString("F0");
 
-                    MyParameter mp = new MyParameter(curWalls.First().LookupParameter("Рзм.ОтметкаВерха"));
+                    Parameter topElevParamForRule = curWalls.First().get_Parameter(topElevParamGuid);
+                    MyParameter mp = new MyParameter(topElevParamForRule);
                     ParameterFilterElement filter =
                         FilterCreator.createSimpleFilter(doc, catsIds, filterName, mp, CriteriaType.Equals);
 
@@ -160,7 +172,7 @@ namespace RevitViewFilters
             Debug.WriteLine("Try to get wall top elevation, wall id: " + w.Id.IntegerValue);
             ElementId levelId = w.LevelId;
             if (levelId == null || levelId == ElementId.InvalidElementId)
-                throw new Exception("У стены нет базового уровня! ID стены: " + w.Id.IntegerValue.ToString());
+                throw new Exception(MyStrings.ErrorNoWallBaseLevel + w.Id.IntegerValue.ToString());
 
             Level lev = doc.GetElement(levelId) as Level;
             double levElev = lev.ProjectElevation;

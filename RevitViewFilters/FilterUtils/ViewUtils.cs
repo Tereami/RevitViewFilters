@@ -91,7 +91,7 @@ namespace RevitViewFilters
                     return false;
                 }
             }
-            throw new Exception("Не удалось определить возможность применения фильтров для вида " + view.Name);
+            throw new Exception("Unable to define the possibility of the filters application to a view:" + view.Name);
         }
 
 
@@ -189,7 +189,7 @@ namespace RevitViewFilters
             }
             if (paramName != "error") return paramName;
 
-            throw new Exception("Id не является идентификатором параметра: " + paramId.IntegerValue.ToString());
+            throw new Exception("Id is not a parameter identifier: " + paramId.IntegerValue.ToString());
         }
 
     }

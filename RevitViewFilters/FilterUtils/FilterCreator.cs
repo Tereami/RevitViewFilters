@@ -63,7 +63,7 @@ namespace RevitViewFilters
 
         public static ParameterFilterElement CreateConstrFilter(Document doc, List<ElementId> catsIds, Parameter markParam, string mark, string filterNamePrefix)
         {
-            string filterName = filterNamePrefix + "_Конструкция " + mark;
+            string filterName = filterNamePrefix + "_Constr " + mark;
 
             ParameterFilterElement filter = DocumentGetter.GetFilterByName(doc, filterName);
             if (filter != null)
@@ -85,7 +85,7 @@ namespace RevitViewFilters
             Document doc, List<ElementId> rebarCatsIds, Parameter rebarIsFamilyParam, Parameter rebarHostParam, Parameter rebarMrkParam,
             string hostMark, string filterNamePrefix, RebarFilterMode filterMode)
         {
-            string filterName = filterNamePrefix + "_Арм Конструкции " + hostMark;
+            string filterName = filterNamePrefix + "_Rebar constr " + hostMark;
 
             if (filterMode == RebarFilterMode.IfcMode)
                 filterName += " IFC";
@@ -202,7 +202,7 @@ namespace RevitViewFilters
                 }
             }
 
-            if (rule == null) throw new Exception("Не удалось создать правило фильтра");
+            if (rule == null) throw new Exception("Unable to create the filter rule");
             return rule;
 
         }
@@ -234,7 +234,7 @@ namespace RevitViewFilters
                     bool check = int.TryParse(Value, out i);
                     if (!check)
                     {
-                        throw new Exception("Ошибка при обработке параметра: " + Param.Definition.Name + " = " + Value);
+                        throw new Exception("Error with a parameter: " + Param.Definition.Name + " = " + Value);
                     }
                     else
                     {

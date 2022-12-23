@@ -47,9 +47,9 @@ namespace RevitViewFilters
                 string filterName = _filterNamePrefix + catsName + " " + paramName;
 
                 if (_criteriaType == CriteriaType.Equals)
-                    filterName = filterName + " равно ";
+                    filterName = filterName + MyStrings.FilterRuleEquals;
                 else if (_criteriaType == CriteriaType.StartsWith)
-                    filterName = filterName + " нач.с ";
+                    filterName = filterName + MyStrings.FilterRuleBeginsWith;
                 filterName += mp.AsValueString();
 
                 ParameterFilterElement filter = FilterCreator.createSimpleFilter(doc, catsIds, filterName, mp, _criteriaType);

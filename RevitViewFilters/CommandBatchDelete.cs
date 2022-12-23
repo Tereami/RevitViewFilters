@@ -67,15 +67,15 @@ namespace RevitViewFilters
 
             using (Transaction t = new Transaction(doc))
             {
-                t.Start("Удаление фильтров: " + deleteFilterNames.Count.ToString());
+                t.Start(MyStrings.TransactionDeleteFilters + ": " + deleteFilterNames.Count.ToString());
                 doc.Delete(ids);
                 t.Commit();
             }
 
             form.Dispose();
 
-            Debug.WriteLine("De;ete filters: " + ids.Count);
-            TaskDialog.Show("Удаление фильтров", "Успешно удалено фильтров: " + ids.Count);
+            Debug.WriteLine("Deleted filters: " + ids.Count);
+            TaskDialog.Show(MyStrings.TransactionDeleteFilters, MyStrings.MessageDeleteFiltersSuccess + ids.Count);
 
             return Result.Succeeded;
         }

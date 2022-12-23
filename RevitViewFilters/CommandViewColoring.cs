@@ -40,7 +40,7 @@ namespace RevitViewFilters
             if (!checkAllowFilters)
             {
                 Debug.WriteLine("View is depended by view template");
-                TaskDialog.Show("Ошибка", "Невозможно назначить фильтры, так как они определяются в шаблоне вида.");
+                TaskDialog.Show(MyStrings.ErrorTitle, MyStrings.ErrorViewTemplate);
                 return Result.Failed;
             }
 
@@ -70,7 +70,7 @@ namespace RevitViewFilters
             {
                 using (Transaction t = new Transaction(doc))
                 {
-                    t.Start("Очистка фильтров");
+                    t.Start(MyStrings.TransactionDeleteFilters);
                     ClearFilters(doc, curView);
                     t.Commit();
                 }
@@ -108,13 +108,13 @@ namespace RevitViewFilters
             else if (collectResult.ResultType == ResultType.warning)
             {
                 Debug.WriteLine(collectResult.Message);
-                TaskDialog.Show("Внимание", collectResult.Message);
+                TaskDialog.Show("Warning", collectResult.Message);
             }
 
             Debug.WriteLine("Values:" + filterData.ValuesCount);
             if (filterData.ValuesCount > 64)
             {
-                message = "Значений больше 64! Генерация цветов невозможна";
+                message = MyStrings.ErrorMore64values;
                 return Result.Failed;
             }
 
@@ -124,7 +124,7 @@ namespace RevitViewFilters
 
             using (Transaction t = new Transaction(doc))
             {
-                t.Start("Колоризация вида");
+                t.Start(MyStrings.TransactionViewColorize);
 
                 ClearFilters(doc, curView);
 

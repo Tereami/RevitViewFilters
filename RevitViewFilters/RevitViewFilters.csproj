@@ -284,6 +284,16 @@
     <Compile Include="FilterUtils\MyParameter.cs" />
     <Compile Include="CsvReaders\ReadDataFromCSV.cs" />
     <Compile Include="FilterUtils\FilterCreator.cs" />
+    <Compile Include="MyStrings.ru-RU.Designer.cs">
+      <DependentUpon>MyStrings.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MyStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FilterUtils\ViewUtils.cs" />
   </ItemGroup>
@@ -305,6 +315,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBatchDelete.ru-RU.resx">
       <DependentUpon>FormBatchDelete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyStrings.ru-RU.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyStrings.ru-RU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

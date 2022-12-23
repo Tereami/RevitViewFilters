@@ -25,7 +25,7 @@ namespace RevitViewFilters
         public static List<MyParameter> GetParameterValues(Document doc, List<Element> elems, string ParamName, int startSymbols)
         {
             bool isTypeParam = false;
-            if (ParamName == "Имя типа" || ParamName == "Имя типа")
+            if (ParamName == "Имя типа" || ParamName == "Имя типа" || ParamName == "Type name" || ParamName == "Type Name")
             {
                 isTypeParam = true;
             }
@@ -62,7 +62,7 @@ namespace RevitViewFilters
                 {
                     if (mp.RevitStorageType != StorageType.String)
                     {
-                        throw new Exception("Критерий \"Начинается с\" доступен только для текстовых параметров");
+                        throw new Exception(MyStrings.ErrorRuleBeginsWithOnlyForText);
                     }
 
                     string valTemp = mp.AsString();

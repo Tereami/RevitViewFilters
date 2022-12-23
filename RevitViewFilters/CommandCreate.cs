@@ -42,7 +42,7 @@ namespace RevitViewFilters
 
             OpenFileDialog openCsvDialog = new OpenFileDialog();
             openCsvDialog.Filter = "CSV file|*.csv";
-            openCsvDialog.Title = "Выберите файл CSV ver. " + ver;
+            openCsvDialog.Title = MyStrings.TitleSelectCsvFile + " ver. " + ver;
             openCsvDialog.Multiselect = false;
             openCsvDialog.InitialDirectory = xmlFolder;
 
@@ -104,9 +104,9 @@ namespace RevitViewFilters
 
                     if (collector.Count() == 0 || param == null)
                     {
-                        message = "Ошибка при создании фильтра: " + filterName;
-                        message += "\nУстановите как минимум один элемент в категории: " + filterSource.Categories[0];
-                        message += "\nТребуемый параметр: " + paramName;
+                        message = MyStrings.ErrorFilterCreation1 + filterName;
+                        message += MyStrings.ErrorFilterCreation2 + filterSource.Categories[0];
+                        message += MyStrings.ErrorFilterCreation3 + paramName;
                         return Result.Failed;
                     }
 
@@ -118,7 +118,7 @@ namespace RevitViewFilters
                 {
                     using (Transaction t = new Transaction(doc))
                     {
-                        t.Start("Создание фильтра" + filterName);
+                        t.Start(MyStrings.TransactionCreateFilters + filterName);
                         ParameterFilterElement filter = ParameterFilterElement.Create(doc, filterName, catIds);
 #if R2017 || R2018
                         
@@ -137,10 +137,10 @@ namespace RevitViewFilters
                 }
 
             }
-            string finalMessage = "Создано фильтров: " + filterCount.ToString() + "\n";
+            string finalMessage = MyStrings.MessageCreateFiltersSuccess + filterCount.ToString() + "\n";
             if (msg.Length != 0)
             {
-                finalMessage += "Не удалось создать: \n" + msg;
+                finalMessage += MyStrings.MessageCreateFiltersFailed + msg;
             }
 
             TaskDialog.Show("Batch filter create", finalMessage);
