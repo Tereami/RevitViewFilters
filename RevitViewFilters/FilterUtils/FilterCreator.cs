@@ -43,7 +43,6 @@ namespace RevitViewFilters
             {
                 rule = FilterCreator.CreateRule(mp, ctype);
 
-
                 if (rule == null) return null;
 
                 List<FilterRule> filterRules = new List<FilterRule> { rule };
@@ -70,7 +69,7 @@ namespace RevitViewFilters
             if (filter != null)
                 return filter;
 
-            FilterRule markEquals = ParameterFilterRuleFactory.CreateEqualsRule(markParam.Id, mark, true);
+            FilterRule markEquals = CreateStringEqualsRule(markParam, mark);
 
 #if R2017 || R2018
             filter = ParameterFilterElement.Create(doc, filterName, catsIds);
@@ -94,8 +93,8 @@ namespace RevitViewFilters
             if (filter != null)
                 return filter;
 
-            FilterRule ruleHostEquals = ParameterFilterRuleFactory.CreateEqualsRule(rebarHostParam.Id, hostMark, true);
-            
+            FilterRule ruleHostEquals = CreateStringEqualsRule(rebarHostParam, hostMark);
+
             if (filterMode == RebarFilterMode.SingleMode)
             {
 #if R2017 || R2018
@@ -110,7 +109,7 @@ namespace RevitViewFilters
 
             FilterRule ruleIsNotFamily = ParameterFilterRuleFactory.CreateEqualsRule(rebarIsFamilyParam.Id, 0);
             FilterRule ruleIsFamily = ParameterFilterRuleFactory.CreateEqualsRule(rebarIsFamilyParam.Id, 1);
-            FilterRule ruleMrkEquals = ParameterFilterRuleFactory.CreateEqualsRule(rebarMrkParam.Id, hostMark, true);
+            FilterRule ruleMrkEquals = CreateStringEqualsRule(rebarMrkParam, hostMark);
 
 
 #if R2017 || R2018
@@ -142,6 +141,18 @@ namespace RevitViewFilters
         }
 
 
+        public static FilterRule CreateStringEqualsRule(Parameter param, string value)
+        {
+            ElementId paramid = param.Id;
+#if R2017 || R2018 || R2019 || R2020 || R2021 || R2022
+            FilterRule rule = ParameterFilterRuleFactory.CreateEqualsRule(paramid, value, true);
+#else
+            FilterRule rule = ParameterFilterRuleFactory.CreateEqualsRule(paramid, value);
+#endif
+            return rule;
+        }
+
+
         public static FilterRule CreateRule(MyParameter mp, CriteriaType ctype)
         {
             Parameter param = mp.RevitParameter;
@@ -161,7 +172,7 @@ namespace RevitViewFilters
                     case StorageType.String:
                         string val = mp.AsString();
                         if (val == null) break;
-                        rule = ParameterFilterRuleFactory.CreateEqualsRule(param.Id, val, true);
+                        rule = CreateStringEqualsRule(param, val);
                         break;
                     case StorageType.ElementId:
                         rule = ParameterFilterRuleFactory.CreateEqualsRule(param.Id, mp.AsElementId());
@@ -180,7 +191,11 @@ namespace RevitViewFilters
                     case StorageType.String:
                         string val = mp.AsString();
                         if (val == null) break;
+#if R2017 || R2018 || R2019 || R2020 || R2021 || R2022
                         rule = ParameterFilterRuleFactory.CreateBeginsWithRule(param.Id, val, true);
+#else
+                        rule = ParameterFilterRuleFactory.CreateBeginsWithRule(param.Id, val);
+#endif
                         break;
                     default:
                         break;
@@ -205,12 +220,12 @@ namespace RevitViewFilters
 
                 case StorageType.Integer:
                     int intValue = 0;
-                    if (Value.Equals("Да") || Value.Equals("да"))
+                    if (Value.Equals("Да") || Value.Equals("да") || Value.Equals("Yes") || Value.Equals("yes"))
                     {
                         intValue = 1;
                         goto Create;
                     }
-                    if (Value.Equals("Нет") || Value.Equals("нет"))
+                    if (Value.Equals("Нет") || Value.Equals("нет") || Value.Equals("No") || Value.Equals("no"))
                     {
                         intValue = 0;
                         goto Create;
@@ -249,6 +264,7 @@ namespace RevitViewFilters
         {
             switch (Function)
             {
+#if R2017 || R2018 || R2019 || R2020 || R2021 || R2022
                 case "Равно":
                     return ParameterFilterRuleFactory.CreateEqualsRule(ParameterId, Value, true);
                 case "Не равно":
@@ -275,7 +291,34 @@ namespace RevitViewFilters
                     return ParameterFilterRuleFactory.CreateNotEndsWithRule(ParameterId, Value, true);
                 case "Поддерживает":
                     return ParameterFilterRuleFactory.CreateSharedParameterApplicableRule(Value);
-
+#else
+                case "Равно":
+                    return ParameterFilterRuleFactory.CreateEqualsRule(ParameterId, Value);
+                case "Не равно":
+                    return ParameterFilterRuleFactory.CreateNotEqualsRule(ParameterId, Value);
+                case "Больше":
+                    return ParameterFilterRuleFactory.CreateGreaterRule(ParameterId, Value);
+                case "Больше или равно":
+                    return ParameterFilterRuleFactory.CreateLessOrEqualRule(ParameterId, Value);
+                case "Меньше":
+                    return ParameterFilterRuleFactory.CreateLessRule(ParameterId, Value);
+                case "Меньше или равно":
+                    return ParameterFilterRuleFactory.CreateLessOrEqualRule(ParameterId, Value);
+                case "Содержит":
+                    return ParameterFilterRuleFactory.CreateContainsRule(ParameterId, Value);
+                case "Не содержит":
+                    return ParameterFilterRuleFactory.CreateNotContainsRule(ParameterId, Value);
+                case "Начинается с":
+                    return ParameterFilterRuleFactory.CreateBeginsWithRule(ParameterId, Value);
+                case "Не начинается с":
+                    return ParameterFilterRuleFactory.CreateNotBeginsWithRule(ParameterId, Value);
+                case "Заканчивается на":
+                    return ParameterFilterRuleFactory.CreateEndsWithRule(ParameterId, Value);
+                case "Не заканчивается на":
+                    return ParameterFilterRuleFactory.CreateNotEndsWithRule(ParameterId, Value);
+                case "Поддерживает":
+                    return ParameterFilterRuleFactory.CreateSharedParameterApplicableRule(Value);
+#endif
                 default:
                     return null;
             }
@@ -345,6 +388,5 @@ namespace RevitViewFilters
             }
 
         }
-
     }
 }
