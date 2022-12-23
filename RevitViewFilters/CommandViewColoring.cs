@@ -30,6 +30,7 @@ namespace RevitViewFilters
         {
             Debug.Listeners.Clear();
             Debug.Listeners.Add(new RbsLogger.Logger("ViewColoring"));
+            AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
             View curView = doc.ActiveView;

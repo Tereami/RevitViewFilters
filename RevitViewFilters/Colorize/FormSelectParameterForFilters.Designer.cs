@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSelectParameterForFilters));
             this.comboBoxParameters = new System.Windows.Forms.ComboBox();
             this.buttonNext = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
@@ -39,10 +40,10 @@
             this.radioButtonUserParameter = new System.Windows.Forms.RadioButton();
             this.radioButtonCheckHostMark = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radioButtonResetColors = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxColorFill = new System.Windows.Forms.CheckBox();
             this.checkBoxColorLines = new System.Windows.Forms.CheckBox();
-            this.radioButtonResetColors = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericStartSymbols)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -51,67 +52,46 @@
             // 
             // comboBoxParameters
             // 
+            resources.ApplyResources(this.comboBoxParameters, "comboBoxParameters");
             this.comboBoxParameters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxParameters.FormattingEnabled = true;
-            this.comboBoxParameters.Location = new System.Drawing.Point(6, 18);
             this.comboBoxParameters.Name = "comboBoxParameters";
-            this.comboBoxParameters.Size = new System.Drawing.Size(221, 21);
-            this.comboBoxParameters.TabIndex = 1;
             // 
             // buttonNext
             // 
-            this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNext.Location = new System.Drawing.Point(199, 289);
+            resources.ApplyResources(this.buttonNext, "buttonNext");
             this.buttonNext.Name = "buttonNext";
-            this.buttonNext.Size = new System.Drawing.Size(75, 23);
-            this.buttonNext.TabIndex = 2;
-            this.buttonNext.Text = "Далее>>";
             this.buttonNext.UseVisualStyleBackColor = true;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            resources.ApplyResources(this.buttonCancel, "buttonCancel");
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(12, 289);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 3;
-            this.buttonCancel.Text = "Отмена";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.labelSymbols);
             this.groupBox1.Controls.Add(this.numericStartSymbols);
             this.groupBox1.Controls.Add(this.comboBoxParameters);
             this.groupBox1.Controls.Add(this.radioButtonStartsWith);
             this.groupBox1.Controls.Add(this.radioButtonEquals);
-            this.groupBox1.Location = new System.Drawing.Point(17, 42);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(233, 96);
-            this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Критерий фильтрации";
             // 
             // labelSymbols
             // 
-            this.labelSymbols.AutoSize = true;
-            this.labelSymbols.Enabled = false;
-            this.labelSymbols.Location = new System.Drawing.Point(125, 71);
+            resources.ApplyResources(this.labelSymbols, "labelSymbols");
             this.labelSymbols.Name = "labelSymbols";
-            this.labelSymbols.Size = new System.Drawing.Size(57, 13);
-            this.labelSymbols.TabIndex = 3;
-            this.labelSymbols.Text = "символов";
             // 
             // numericStartSymbols
             // 
-            this.numericStartSymbols.Enabled = false;
-            this.numericStartSymbols.Location = new System.Drawing.Point(77, 69);
+            resources.ApplyResources(this.numericStartSymbols, "numericStartSymbols");
             this.numericStartSymbols.Name = "numericStartSymbols";
-            this.numericStartSymbols.Size = new System.Drawing.Size(42, 20);
-            this.numericStartSymbols.TabIndex = 2;
             this.numericStartSymbols.Value = new decimal(new int[] {
             3,
             0,
@@ -120,133 +100,91 @@
             // 
             // radioButtonStartsWith
             // 
-            this.radioButtonStartsWith.AutoSize = true;
-            this.radioButtonStartsWith.Location = new System.Drawing.Point(6, 69);
+            resources.ApplyResources(this.radioButtonStartsWith, "radioButtonStartsWith");
             this.radioButtonStartsWith.Name = "radioButtonStartsWith";
-            this.radioButtonStartsWith.Size = new System.Drawing.Size(65, 17);
-            this.radioButtonStartsWith.TabIndex = 1;
-            this.radioButtonStartsWith.Text = "Первые";
             this.radioButtonStartsWith.UseVisualStyleBackColor = true;
             this.radioButtonStartsWith.CheckedChanged += new System.EventHandler(this.radioButtonStartsWith_CheckedChanged);
             // 
             // radioButtonEquals
             // 
-            this.radioButtonEquals.AutoSize = true;
+            resources.ApplyResources(this.radioButtonEquals, "radioButtonEquals");
             this.radioButtonEquals.Checked = true;
-            this.radioButtonEquals.Location = new System.Drawing.Point(6, 45);
             this.radioButtonEquals.Name = "radioButtonEquals";
-            this.radioButtonEquals.Size = new System.Drawing.Size(94, 17);
-            this.radioButtonEquals.TabIndex = 0;
             this.radioButtonEquals.TabStop = true;
-            this.radioButtonEquals.Text = "Всё значение";
             this.radioButtonEquals.UseVisualStyleBackColor = true;
             this.radioButtonEquals.CheckedChanged += new System.EventHandler(this.radioButtonEquals_CheckedChanged);
             // 
             // radioButtonUserParameter
             // 
-            this.radioButtonUserParameter.AutoSize = true;
+            resources.ApplyResources(this.radioButtonUserParameter, "radioButtonUserParameter");
             this.radioButtonUserParameter.Checked = true;
-            this.radioButtonUserParameter.Location = new System.Drawing.Point(6, 19);
             this.radioButtonUserParameter.Name = "radioButtonUserParameter";
-            this.radioButtonUserParameter.Size = new System.Drawing.Size(152, 17);
-            this.radioButtonUserParameter.TabIndex = 2;
             this.radioButtonUserParameter.TabStop = true;
-            this.radioButtonUserParameter.Text = "По значению параметра:";
             this.radioButtonUserParameter.UseVisualStyleBackColor = true;
             this.radioButtonUserParameter.CheckedChanged += new System.EventHandler(this.radioButtonUserParameter_CheckedChanged);
             // 
             // radioButtonCheckHostMark
             // 
-            this.radioButtonCheckHostMark.AutoSize = true;
-            this.radioButtonCheckHostMark.Location = new System.Drawing.Point(6, 144);
+            resources.ApplyResources(this.radioButtonCheckHostMark, "radioButtonCheckHostMark");
             this.radioButtonCheckHostMark.Name = "radioButtonCheckHostMark";
-            this.radioButtonCheckHostMark.Size = new System.Drawing.Size(204, 17);
-            this.radioButtonCheckHostMark.TabIndex = 5;
             this.radioButtonCheckHostMark.TabStop = true;
-            this.radioButtonCheckHostMark.Text = "Проверка Метки основы арматуры";
             this.radioButtonCheckHostMark.UseVisualStyleBackColor = true;
             this.radioButtonCheckHostMark.CheckedChanged += new System.EventHandler(this.radioButtonCheckHostMark_CheckedChanged);
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Controls.Add(this.radioButtonUserParameter);
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.radioButtonResetColors);
             this.groupBox2.Controls.Add(this.radioButtonCheckHostMark);
-            this.groupBox2.Location = new System.Drawing.Point(12, 86);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(261, 195);
-            this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Алгоритм";
+            // 
+            // radioButtonResetColors
+            // 
+            resources.ApplyResources(this.radioButtonResetColors, "radioButtonResetColors");
+            this.radioButtonResetColors.Name = "radioButtonResetColors";
+            this.radioButtonResetColors.TabStop = true;
+            this.radioButtonResetColors.UseVisualStyleBackColor = true;
+            this.radioButtonResetColors.CheckedChanged += new System.EventHandler(this.radioButtonCheckHostMark_CheckedChanged);
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.groupBox3, "groupBox3");
             this.groupBox3.Controls.Add(this.checkBoxColorFill);
             this.groupBox3.Controls.Add(this.checkBoxColorLines);
-            this.groupBox3.Location = new System.Drawing.Point(12, 13);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(261, 67);
-            this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Графика";
             // 
             // checkBoxColorFill
             // 
-            this.checkBoxColorFill.AutoSize = true;
+            resources.ApplyResources(this.checkBoxColorFill, "checkBoxColorFill");
             this.checkBoxColorFill.Checked = true;
             this.checkBoxColorFill.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxColorFill.Location = new System.Drawing.Point(7, 43);
             this.checkBoxColorFill.Name = "checkBoxColorFill";
-            this.checkBoxColorFill.Size = new System.Drawing.Size(114, 17);
-            this.checkBoxColorFill.TabIndex = 0;
-            this.checkBoxColorFill.Text = "Цветная заливка";
             this.checkBoxColorFill.UseVisualStyleBackColor = true;
             // 
             // checkBoxColorLines
             // 
-            this.checkBoxColorLines.AutoSize = true;
+            resources.ApplyResources(this.checkBoxColorLines, "checkBoxColorLines");
             this.checkBoxColorLines.Checked = true;
             this.checkBoxColorLines.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxColorLines.Location = new System.Drawing.Point(7, 20);
             this.checkBoxColorLines.Name = "checkBoxColorLines";
-            this.checkBoxColorLines.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxColorLines.TabIndex = 0;
-            this.checkBoxColorLines.Text = "Цветные линии";
             this.checkBoxColorLines.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonResetColors
-            // 
-            this.radioButtonResetColors.AutoSize = true;
-            this.radioButtonResetColors.Location = new System.Drawing.Point(6, 167);
-            this.radioButtonResetColors.Name = "radioButtonResetColors";
-            this.radioButtonResetColors.Size = new System.Drawing.Size(121, 17);
-            this.radioButtonResetColors.TabIndex = 5;
-            this.radioButtonResetColors.TabStop = true;
-            this.radioButtonResetColors.Text = "Сбросить фильтры";
-            this.radioButtonResetColors.UseVisualStyleBackColor = true;
-            this.radioButtonResetColors.CheckedChanged += new System.EventHandler(this.radioButtonCheckHostMark_CheckedChanged);
             // 
             // FormSelectParameterForFilters
             // 
             this.AcceptButton = this.buttonNext;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(285, 324);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonNext);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FormSelectParameterForFilters";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Шаг 1";
             this.Load += new System.EventHandler(this.FormSelectParameterForFilters_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

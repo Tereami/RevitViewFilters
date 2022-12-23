@@ -32,6 +32,7 @@ namespace RevitViewFilters
         {
             Debug.Listeners.Clear();
             Debug.Listeners.Add(new RbsLogger.Logger("BatchDeleteFilters"));
+            AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
             List<ParameterFilterElement> filters = new FilteredElementCollector(doc)

@@ -288,6 +288,12 @@
     <Compile Include="FilterUtils\ViewUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Colorize\FormSelectCategories.ru-RU.resx">
+      <DependentUpon>FormSelectCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Colorize\FormSelectParameterForFilters.ru-RU.resx">
+      <DependentUpon>FormSelectParameterForFilters.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormBatchDelete.resx">
       <DependentUpon>FormBatchDelete.cs</DependentUpon>
     </EmbeddedResource>
@@ -296,6 +302,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Colorize\FormSelectParameterForFilters.resx">
       <DependentUpon>FormSelectParameterForFilters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormBatchDelete.ru-RU.resx">
+      <DependentUpon>FormBatchDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

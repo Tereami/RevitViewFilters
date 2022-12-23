@@ -30,6 +30,8 @@ namespace RevitViewFilters
         {
             Debug.Listeners.Clear();
             Debug.Listeners.Add(new RbsLogger.Logger("WallHatch"));
+            AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
             Document doc = commandData.Application.ActiveUIDocument.Document;
             View curView = doc.ActiveView;
             if (!(curView is ViewPlan))
