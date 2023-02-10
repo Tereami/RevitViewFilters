@@ -55,7 +55,10 @@ namespace RevitViewFilters
                     filter.SetElementFilter(new ElementParameterFilter(filterRules));
 #endif
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Failed to create filter: {filterName}. {ex.Message}");
+                }
 
             }
             return filter;

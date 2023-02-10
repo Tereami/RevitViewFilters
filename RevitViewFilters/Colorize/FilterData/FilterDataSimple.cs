@@ -9,6 +9,22 @@ namespace RevitViewFilters
 {
     class FilterDataSimple : IFilterData
     {
+        public static Dictionary<string, string> ForbiddenFilterNameSymbols = new Dictionary<string, string>
+        {
+            { ":", "_colon_" },
+            { ";", "_semicolon" },
+            { "[", "_bracket_" },
+            { "]", "_bracket_" },
+            { "{", "_brace_" },
+            { "}", "_brace_" },
+            { "?", "_question" },
+            { "~", "_tilda_" },
+            { "`", "_gravis_" },
+            { "|", "_pipe_" },
+            { "<", "_less_" },
+            { ">", "_greater_" },
+            { "\\", "_slash_" },
+        };
 
         public int ValuesCount => valuesList.Count;
 
@@ -52,15 +68,19 @@ namespace RevitViewFilters
                     filterName = filterName + MyStrings.FilterRuleBeginsWith;
                 filterName += mp.AsValueString();
 
+                foreach (var kvp in ForbiddenFilterNameSymbols)
+                {
+                    if (filterName.Contains(kvp.Key))
+                        filterName = filterName.Replace(kvp.Key, kvp.Value);
+                }
+
                 ParameterFilterElement filter = FilterCreator.createSimpleFilter(doc, catsIds, filterName, mp, _criteriaType);
                 if (filter == null) continue;
-
 
                 ViewUtils.ApplyViewFilter(doc, v, filter, fillPatternId, i, colorLines, colorFill);
 
             }
             return true;
-
         }
 
         public MyDialogResult CollectValues(Document doc, View v)
