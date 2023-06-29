@@ -43,14 +43,14 @@ namespace RevitViewFilters
         public FilterDataForRebars(Document doc)
         {
             //define is it weandrevit template or not
-            List<int> projParamsIds = new List<int>();
+            List<long> projParamsIds = new List<long>();
             DefinitionBindingMapIterator it = doc.ParameterBindings.ForwardIterator();
             it.Reset();
             while (it.MoveNext())
             {
                 InternalDefinition def = it.Key as InternalDefinition;
                 if (def == null) continue;
-                projParamsIds.Add(def.Id.IntegerValue);
+                projParamsIds.Add(def.Id.GetValue());
             }
             List<SharedParameterElement> spes = new FilteredElementCollector(doc)
                 .OfClass(typeof(SharedParameterElement))
@@ -58,7 +58,7 @@ namespace RevitViewFilters
                 .ToList();
             foreach (SharedParameterElement spe in spes)
             {
-                if (!projParamsIds.Contains(spe.Id.IntegerValue))
+                if (!projParamsIds.Contains(spe.Id.GetValue()))
                     continue;
                 Guid curGuid = spe.GuidValue;
                 if (curGuid.Equals(rebarIsFamilyParamGuid))

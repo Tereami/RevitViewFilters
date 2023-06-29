@@ -68,12 +68,12 @@ namespace RevitViewFilters
 
             View template = doc.GetElement(templateId) as View;
 
-            List<int> nonControlledParmsIds = template.GetNonControlledTemplateParameterIds()
-                .Select(p => p.IntegerValue)
+            List<long> nonControlledParmsIds = template.GetNonControlledTemplateParameterIds()
+                .Select(p => p.GetValue())
                 .ToList();
 
-            List<int> allTemplateParams = template.GetTemplateParameterIds()
-                .Select(p => p.IntegerValue)
+            List<long> allTemplateParams = template.GetTemplateParameterIds()
+                .Select(p => p.GetValue())
                 .ToList();
 
             int visFiltersParamId = (int)BuiltInParameter.VIS_GRAPHICS_FILTERS;
@@ -170,7 +170,7 @@ namespace RevitViewFilters
             {
                 Category cat = elem.Category;
                 if (cat == null) continue;
-                if (cat.Id.IntegerValue == -2000500) continue;
+                if (cat.Id.GetValue() == -2000500) continue;
                 catsIds.Add(cat.Id);
             }
             return catsIds;
@@ -179,9 +179,9 @@ namespace RevitViewFilters
         public static string GetParamName(Document doc, ElementId paramId)
         {
             string paramName = "error";
-            if (paramId.IntegerValue < 0)
+            if (paramId.GetValue() < 0)
             {
-                paramName = LabelUtils.GetLabelFor((BuiltInParameter)paramId.IntegerValue);
+                paramName = LabelUtils.GetLabelFor((BuiltInParameter)paramId.GetValue());
             }
             else
             {
@@ -189,7 +189,7 @@ namespace RevitViewFilters
             }
             if (paramName != "error") return paramName;
 
-            throw new Exception("Id is not a parameter identifier: " + paramId.IntegerValue.ToString());
+            throw new Exception("Id is not a parameter identifier: " + paramId.GetValue().ToString());
         }
 
     }

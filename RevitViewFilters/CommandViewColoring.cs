@@ -51,7 +51,7 @@ namespace RevitViewFilters
                  .Where(e => e != null)
                  .Where(e => e.IsValidObject)
                  .Where(e => e.Category != null)
-                 .Where(e => e.Category.Id.IntegerValue != -2000500)
+                 .Where(e => e.Category.Id.GetValue() != -2000500)
                  .ToList();
             Debug.WriteLine("Elements on view: " + elems.Count);    
             List<MyParameter> mparams = ViewUtils.GetAllFilterableParameters(doc, elems);

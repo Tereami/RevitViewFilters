@@ -59,7 +59,7 @@ namespace RevitViewFilters
                 case StorageType.String:
                     return this.AsString() == other.AsString();
                 case StorageType.ElementId:
-                    return this.AsElementId().IntegerValue == other.AsElementId().IntegerValue;
+                    return this.AsElementId().GetValue() == other.AsElementId().GetValue();
                 default:
                     return false;
             }
@@ -247,7 +247,7 @@ namespace RevitViewFilters
                 case StorageType.String:
                     return stringValue;
                 case StorageType.ElementId:
-                    return elemIdValue.IntegerValue.ToString();
+                    return elemIdValue.GetValue().ToString();
                 default:
                     return "";
             }

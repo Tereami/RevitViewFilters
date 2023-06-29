@@ -82,7 +82,7 @@ namespace RevitViewFilters
 
             foreach (Wall w in walls)
             {
-                Debug.WriteLine("Current wall id:" + w.Id.IntegerValue);
+                Debug.WriteLine($"Current wall id: {w.Id}");
                 double topElev = GetWallTopElev(doc, w, true);
                 Debug.WriteLine("Top elevation: " + topElev.ToString("F1"));
 
@@ -169,10 +169,10 @@ namespace RevitViewFilters
 
         private double GetWallTopElev(Document doc, Wall w, bool TopOrBottomElev)
         {
-            Debug.WriteLine("Try to get wall top elevation, wall id: " + w.Id.IntegerValue);
+            Debug.WriteLine($"Try to get wall top elevation, wall id: {w.Id}");
             ElementId levelId = w.LevelId;
             if (levelId == null || levelId == ElementId.InvalidElementId)
-                throw new Exception(MyStrings.ErrorNoWallBaseLevel + w.Id.IntegerValue.ToString());
+                throw new Exception($"{MyStrings.ErrorNoWallBaseLevel} {w.Id}");
 
             Level lev = doc.GetElement(levelId) as Level;
             double levElev = lev.ProjectElevation;
@@ -228,7 +228,7 @@ namespace RevitViewFilters
                 Debug.WriteLine("Unable to find hatch: " + hatchName);
                 throw new Exception("Не удалось найти штриховку " + hatchName);
             }
-            Debug.WriteLine("Hatch found: " + fpes.First().Id.IntegerValue);
+            Debug.WriteLine($"Hatch found:  {fpes.First().Id}");
             return fpes.First().Id;
         }
 
@@ -259,7 +259,7 @@ namespace RevitViewFilters
                 ImageType errImg = errImgs.First();
                 return errImg;
             }
-            Debug.WriteLine("Image found, id: " + images.First().Id.IntegerValue);
+            Debug.WriteLine($"Hatch found:  {images.First().Id}");
             return images.First();
         }
     }

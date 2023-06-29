@@ -254,8 +254,13 @@ namespace RevitViewFilters
                     return doubleRule;
 
                 case StorageType.ElementId:
+#if R2017 || R2018 || R2019 || R2020 || R2021 || R2022 || R2023
                     int id = int.Parse(Value);
                     ElementId valueId = new ElementId(id);
+#else
+                    long id = long.Parse(Value);
+                    ElementId valueId = new ElementId(id);
+#endif
                     FilterRule idRule = CreateRule(paramId, Function, valueId);
                     return idRule;
             }

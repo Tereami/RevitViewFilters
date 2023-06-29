@@ -14,7 +14,7 @@ namespace RevitViewFilters
 
         public MyCategory(Document doc, ElementId categoryId)
         {
-            BuiltinCat = (BuiltInCategory)categoryId.IntegerValue;
+            BuiltinCat = (BuiltInCategory)categoryId.GetValue();
 
             Cat = Category.GetCategory(doc, BuiltinCat);
         }

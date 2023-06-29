@@ -39,7 +39,7 @@ namespace RevitViewFilters
             {
                 Category cat = iterator.Current as Category;
                 if (cat == null) continue;
-                BuiltInCategory bic = (BuiltInCategory)cat.Id.IntegerValue;
+                BuiltInCategory bic = (BuiltInCategory)cat.Id.GetValue();
                 string catname = cat.Name;
                 categories.Add(catname, bic);
             }
