@@ -31,8 +31,8 @@ namespace RevitViewFilters
             Guid topElevParamGuid = new Guid("ec353104-09f1-44f4-85cf-1d638dce02d3");
             Guid bottomElevParamGuid = new Guid("8a58ad74-0e15-499b-bcaf-35b45cd7fc1f");
 
-            Debug.Listeners.Clear();
-            Debug.Listeners.Add(new RbsLogger.Logger("WallHatch"));
+            Trace.Listeners.Clear();
+            Trace.Listeners.Add(new RbsLogger.Logger("WallHatch"));
             AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
@@ -40,19 +40,19 @@ namespace RevitViewFilters
             if (!(curView is ViewPlan))
             {
                 message = MyStrings.ErrorOnlyViewplan;
-                Debug.WriteLine(message);
+                Trace.WriteLine(message);
                 return Result.Failed;
             }
 
             if (curView.ViewTemplateId != null && curView.ViewTemplateId != ElementId.InvalidElementId)
             {
                 message = MyStrings.ErrorViewTemplate;
-                Debug.WriteLine(message);
+                Trace.WriteLine(message);
                 return Result.Failed;
             }
 
             Selection sel = commandData.Application.ActiveUIDocument.Selection;
-            Debug.WriteLine("Selected elements: " + sel.GetElementIds().Count);
+            Trace.WriteLine("Selected elements: " + sel.GetElementIds().Count);
             if (sel.GetElementIds().Count == 0)
             {
                 message = MyStrings.ErrorWallsNotSelected;
@@ -65,7 +65,7 @@ namespace RevitViewFilters
                 if (w == null) continue;
                 walls.Add(w);
             }
-            Debug.WriteLine("Walls count: " + walls.Count);
+            Trace.WriteLine("Walls count: " + walls.Count);
             if (walls.Count == 0)
             {
                 message = MyStrings.ErrorWallsNotSelected;
@@ -76,15 +76,15 @@ namespace RevitViewFilters
             if (wallHeigthDict.Count > 10)
             {
                 message = MyStrings.ErrorWallsMoreThan10;
-                Debug.WriteLine(message);
+                Trace.WriteLine(message);
                 return Result.Failed;
             }
 
             foreach (Wall w in walls)
             {
-                Debug.WriteLine($"Current wall id: {w.Id}");
+                Trace.WriteLine($"Current wall id: {w.Id}");
                 double topElev = GetWallTopElev(doc, w, true);
-                Debug.WriteLine("Top elevation: " + topElev.ToString("F1"));
+                Trace.WriteLine("Top elevation: " + topElev.ToString("F1"));
 
                 if (wallHeigthDict.ContainsKey(topElev))
                 {
@@ -111,11 +111,11 @@ namespace RevitViewFilters
                         curView.RemoveFilter(filterId);
                     }
                 }
-                Debug.WriteLine("Old filters deleted");
+                Trace.WriteLine("Old filters deleted");
 
                 foreach (var kvp in wallHeigthDict)
                 {
-                    Debug.WriteLine("Current key: " + kvp.Key.ToString("F1"));
+                    Trace.WriteLine("Current key: " + kvp.Key.ToString("F1"));
                     ElementId hatchId = GetHatchIdByNumber(doc, i);
                     ImageType image = GetImageTypeByNumber(doc, i);
 
@@ -169,7 +169,7 @@ namespace RevitViewFilters
 
         private double GetWallTopElev(Document doc, Wall w, bool TopOrBottomElev)
         {
-            Debug.WriteLine($"Try to get wall top elevation, wall id: {w.Id}");
+            Trace.WriteLine($"Try to get wall top elevation, wall id: {w.Id}");
             ElementId levelId = w.LevelId;
             if (levelId == null || levelId == ElementId.InvalidElementId)
                 throw new Exception($"{MyStrings.ErrorNoWallBaseLevel} {w.Id}");
@@ -195,7 +195,7 @@ namespace RevitViewFilters
         private ElementId GetHatchIdByNumber(Document doc, int number)
         {
             string hatchName = GetHatchNameByNumber(doc, number);
-            Debug.WriteLine("Hatch name: " + hatchName);
+            Trace.WriteLine("Hatch name: " + hatchName);
             ElementId hatchId = GetHatchIdByName(doc, hatchName);
             return hatchId;
         }
@@ -225,17 +225,17 @@ namespace RevitViewFilters
                 .ToList();
             if (fpes.Count == 0)
             {
-                Debug.WriteLine("Unable to find hatch: " + hatchName);
+                Trace.WriteLine("Unable to find hatch: " + hatchName);
                 throw new Exception("Не удалось найти штриховку " + hatchName);
             }
-            Debug.WriteLine($"Hatch found:  {fpes.First().Id}");
+            Trace.WriteLine($"Hatch found:  {fpes.First().Id}");
             return fpes.First().Id;
         }
 
         private ImageType GetImageTypeByNumber(Document doc, int number)
         {
             string name = "ШтриховкаСтены_" + number.ToString() + ".png";
-            Debug.WriteLine("Try to find image: " + name);
+            Trace.WriteLine("Try to find image: " + name);
 
             List<ImageType> images = new FilteredElementCollector(doc)
                 .OfClass(typeof(ImageType))
@@ -252,14 +252,14 @@ namespace RevitViewFilters
                     .ToList();
                 if (errImgs.Count == 0)
                 {
-                    Debug.WriteLine("No wall images in the project");
+                    Trace.WriteLine("No wall images in the project");
                     throw new Exception("Загрузите в проект картинки!");
                 }
 
                 ImageType errImg = errImgs.First();
                 return errImg;
             }
-            Debug.WriteLine($"Hatch found:  {images.First().Id}");
+            Trace.WriteLine($"Hatch found:  {images.First().Id}");
             return images.First();
         }
     }

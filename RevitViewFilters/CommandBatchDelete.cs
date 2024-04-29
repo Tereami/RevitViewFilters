@@ -30,8 +30,8 @@ namespace RevitViewFilters
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Debug.Listeners.Clear();
-            Debug.Listeners.Add(new RbsLogger.Logger("BatchDeleteFilters"));
+            Trace.Listeners.Clear();
+            Trace.Listeners.Add(new RbsLogger.Logger("BatchDeleteFilters"));
             AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             Document doc = commandData.Application.ActiveUIDocument.Document;
 
@@ -39,7 +39,7 @@ namespace RevitViewFilters
                 .OfClass(typeof(ParameterFilterElement))
                 .Cast<ParameterFilterElement>()
                 .ToList();
-            Debug.WriteLine("Filters found: " + filters.Count);
+            Trace.WriteLine("Filters found: " + filters.Count);
 
             List<string> filterNames = filters.Select(x => x.Name).ToList();
             filterNames.Sort();
@@ -51,17 +51,17 @@ namespace RevitViewFilters
 
             if (form.DialogResult != DialogResult.OK)
             {
-                Debug.WriteLine("Cancelled by user");
+                Trace.WriteLine("Cancelled by user");
                 return Result.Cancelled;
             }
 
             List<string> deleteFilterNames = form.CheckedItems;
-            Debug.WriteLine("Filters name for deleting: " + deleteFilterNames.Count);
+            Trace.WriteLine("Filters name for deleting: " + deleteFilterNames.Count);
 
             List<ParameterFilterElement> filtersToDelete = filters
                 .Where(i => deleteFilterNames.Contains(i.Name))
                 .ToList();
-            Debug.WriteLine("filters found: " + filtersToDelete.Count);
+            Trace.WriteLine("filters found: " + filtersToDelete.Count);
 
             List<ElementId> ids = filtersToDelete.Select(i => i.Id).ToList();
 
@@ -74,8 +74,8 @@ namespace RevitViewFilters
 
             form.Dispose();
 
-            Debug.WriteLine("Deleted filters: " + ids.Count);
-            TaskDialog.Show(MyStrings.TransactionDeleteFilters, MyStrings.MessageDeleteFiltersSuccess + ids.Count);
+            Trace.WriteLine("Deleted filters: " + ids.Count);
+            Autodesk.Revit.UI.TaskDialog.Show(MyStrings.TransactionDeleteFilters, MyStrings.MessageDeleteFiltersSuccess + ids.Count);
 
             return Result.Succeeded;
         }

@@ -143,7 +143,7 @@ namespace RevitViewFilters
                 finalMessage += MyStrings.MessageCreateFiltersFailed + msg;
             }
 
-            TaskDialog.Show("Batch filter create", finalMessage);
+            Autodesk.Revit.UI.TaskDialog.Show("Batch filter create", finalMessage);
             return Result.Succeeded;
         }
     }

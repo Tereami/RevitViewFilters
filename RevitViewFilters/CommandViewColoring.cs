@@ -28,8 +28,8 @@ namespace RevitViewFilters
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            Debug.Listeners.Clear();
-            Debug.Listeners.Add(new RbsLogger.Logger("ViewColoring"));
+            Trace.Listeners.Clear();
+            Trace.Listeners.Add(new RbsLogger.Logger("ViewColoring"));
             AppBatchFilterCreation.assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             Document doc = commandData.Application.ActiveUIDocument.Document;
@@ -39,7 +39,7 @@ namespace RevitViewFilters
             bool checkAllowFilters = ViewUtils.CheckIsChangeFiltersAvailable(doc, curView);
             if (!checkAllowFilters)
             {
-                Debug.WriteLine("View is depended by view template");
+                Trace.WriteLine("View is depended by view template");
                 TaskDialog.Show(MyStrings.ErrorTitle, MyStrings.ErrorViewTemplate);
                 return Result.Failed;
             }
@@ -53,15 +53,15 @@ namespace RevitViewFilters
                  .Where(e => e.Category != null)
                  .Where(e => e.Category.Id.GetValue() != -2000500)
                  .ToList();
-            Debug.WriteLine("Elements on view: " + elems.Count);    
+            Trace.WriteLine("Elements on view: " + elems.Count);    
             List<MyParameter> mparams = ViewUtils.GetAllFilterableParameters(doc, elems);
-            Debug.WriteLine("Filterable parameters found: " + mparams.Count);
+            Trace.WriteLine("Filterable parameters found: " + mparams.Count);
 
             FormSelectParameterForFilters form1 = new FormSelectParameterForFilters();
             form1.parameters = mparams;
             if (form1.ShowDialog() != System.Windows.Forms.DialogResult.OK)
             {
-                Debug.WriteLine("Cancelled by user");
+                Trace.WriteLine("Cancelled by user");
                 return Result.Cancelled;
             }
 
@@ -82,36 +82,36 @@ namespace RevitViewFilters
                 if (form1.criteriaType == CriteriaType.StartsWith)
                 {
                     startSymbols = form1.startSymbols;
-                    Debug.WriteLine("Filter criteria start symbols:" + startSymbols);
+                    Trace.WriteLine("Filter criteria start symbols:" + startSymbols);
                 }
-                Debug.WriteLine("Colorize by parameter: " + form1.selectedParameter.Name);
+                Trace.WriteLine("Colorize by parameter: " + form1.selectedParameter.Name);
                 filterData = new FilterDataSimple(doc, elems, form1.selectedParameter, form1.startSymbols, form1.criteriaType);
             }
             else if (form1.colorizeMode == ColorizeMode.CheckHostmark)
             {
-                Debug.WriteLine("Colorize for rebar host checking");
+                Trace.WriteLine("Colorize for rebar host checking");
                 filterData = new FilterDataForRebars(doc);
             }
 
             MyDialogResult collectResult = filterData.CollectValues(doc, curView);
             if(collectResult.ResultType == ResultType.cancel)
             {
-                Debug.WriteLine("Cancelled by user");
+                Trace.WriteLine("Cancelled by user");
                 return Result.Cancelled;
             }
             else if(collectResult.ResultType == ResultType.error)
             {
                 message = collectResult.Message;
-                Debug.WriteLine(message);
+                Trace.WriteLine(message);
                 return Result.Failed;
             }
             else if (collectResult.ResultType == ResultType.warning)
             {
-                Debug.WriteLine(collectResult.Message);
+                Trace.WriteLine(collectResult.Message);
                 TaskDialog.Show("Warning", collectResult.Message);
             }
 
-            Debug.WriteLine("Values:" + filterData.ValuesCount);
+            Trace.WriteLine("Values:" + filterData.ValuesCount);
             if (filterData.ValuesCount > 64)
             {
                 message = MyStrings.ErrorMore64values;
@@ -132,13 +132,13 @@ namespace RevitViewFilters
 
                 t.Commit();
             }
-            Debug.WriteLine("Coloring completed");
+            Trace.WriteLine("Coloring completed");
             return Result.Succeeded;
         }
 
         private void ClearFilters(Document doc, View view)
         {
-            Debug.WriteLine("Clear coloring filters on view: " + view.Name);
+            Trace.WriteLine("Clear coloring filters on view: " + view.Name);
             foreach (ElementId filterId in view.GetFilters())
             {
                 ParameterFilterElement filter = doc.GetElement(filterId) as ParameterFilterElement;
@@ -147,7 +147,7 @@ namespace RevitViewFilters
                     view.RemoveFilter(filterId);
                 }
             }
-            Debug.WriteLine("Clear filters completed");
+            Trace.WriteLine("Clear filters completed");
         }
     }
 }

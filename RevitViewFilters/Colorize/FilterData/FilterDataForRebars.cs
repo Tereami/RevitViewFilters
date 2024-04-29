@@ -76,11 +76,11 @@ namespace RevitViewFilters
 
         public bool ApplyFilters(Document doc, View v, ElementId fillPatternId, bool colorLines, bool colorFill)
         {
-            Debug.WriteLine("Start apply rebar filters for view: " + v.Name);
+            Trace.WriteLine("Start apply rebar filters for view: " + v.Name);
             for (int i = 0; i < values.Count; i++)
             {
                 string val = values[i];
-                Debug.WriteLine("Value: " + val);
+                Trace.WriteLine("Value: " + val);
 
                 ParameterFilterElement filterConstr = FilterCreator.CreateConstrFilter(doc, catIdConstructions, markParam, val, _filterNamePrefix);
                 ViewUtils.ApplyViewFilter(doc, v, filterConstr, fillPatternId, i, colorLines, colorFill);
@@ -91,17 +91,17 @@ namespace RevitViewFilters
                     ParameterFilterElement filterRebarStandardRebar = FilterCreator
                         .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.StandardRebarMode);
                     ViewUtils.ApplyViewFilter(doc, v, filterRebarStandardRebar, fillPatternId, i, colorLines, colorFill);
-                    Debug.WriteLine("Filter created and applied to view: " + filterRebarStandardRebar.Name);
+                    Trace.WriteLine("Filter created and applied to view: " + filterRebarStandardRebar.Name);
 
                     ParameterFilterElement filterRebarIfcRebar = FilterCreator
                         .CreateRebarHostFilter(doc, new List<ElementId> { new ElementId(BuiltInCategory.OST_Rebar) }, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.IfcMode);
                     ViewUtils.ApplyViewFilter(doc, v, filterRebarIfcRebar, fillPatternId, i, colorLines, colorFill);
-                    Debug.WriteLine("Filter created and applied to view: " + filterRebarIfcRebar.Name);
+                    Trace.WriteLine("Filter created and applied to view: " + filterRebarIfcRebar.Name);
 #else
                     ParameterFilterElement filterRebarOrStyle = FilterCreator
                         .CreateRebarHostFilter(doc, catIdRebar, rebarIsFamilyParam, rebarHostParamBuiltin, rebarHostParamShared, val, _filterNamePrefix, RebarFilterMode.DoubleMode);
                     ViewUtils.ApplyViewFilter(doc, v, filterRebarOrStyle, fillPatternId, i, colorLines, colorFill);
-                    Debug.WriteLine("Filter created and applied to view: " + filterRebarOrStyle.Name);
+                    Trace.WriteLine("Filter created and applied to view: " + filterRebarOrStyle.Name);
 #endif
                 }
                 else
@@ -112,13 +112,13 @@ namespace RevitViewFilters
                     continue;
                 }
             }
-            Debug.WriteLine("All filters applied");
+            Trace.WriteLine("All filters applied");
             return true;
         }
 
         public MyDialogResult CollectValues(Document doc, View v)
         {
-            Debug.WriteLine("Collect parameter values for view: " + v.Name);
+            Trace.WriteLine("Collect parameter values for view: " + v.Name);
             MyDialogResult result = new MyDialogResult(ResultType.ok, "");
             catIdRebar = new List<ElementId> {
                 new ElementId(BuiltInCategory.OST_Rebar),
@@ -139,7 +139,7 @@ namespace RevitViewFilters
                 .OfCategory(BuiltInCategory.OST_Rebar)
                 .ToElements()
                 .ToList();
-            Debug.WriteLine("Rebars count: " + rebars.Count);
+            Trace.WriteLine("Rebars count: " + rebars.Count);
 
             HashSet<string> hostMarksList = new HashSet<string>();
 
@@ -197,7 +197,7 @@ namespace RevitViewFilters
 
             values = hostMarksList.ToList();
             values.Sort();
-            Debug.WriteLine("Collect values: " + values.Count);
+            Trace.WriteLine("Collect values: " + values.Count);
             return result;
         }
     }
